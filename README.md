@@ -18,8 +18,8 @@ Or `pipx`:
 
 To install your environment:
 
-    $ well install [INSTALLABLE]
+    $ well install [ROUTINE]
 
 To update your environment:
 
-    $ well update [INSTALLABLE]
+    $ well update [ROUTINE]
