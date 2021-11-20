@@ -16,6 +16,7 @@ def register(name):
 
 
 class Installable(ABC):
+
     @abstractmethod
     def exists(self):
         pass

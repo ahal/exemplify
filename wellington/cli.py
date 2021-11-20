@@ -6,6 +6,7 @@ from pathlib import Path
 import tomli
 
 from wellington.installables.base import registry
+from wellington.util.merge import merge
 
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -35,15 +36,24 @@ def update(item):
 
 
 def parse_config(path):
+    root_path = os.path.dirname(path)
+
     with open(path) as fh:
-        return tomli.load(fh)
+        data = tomli.load(fh)
+
+    data.setdefault("meta", {})
+    for item in data["meta"].pop("include", []):
+        path = os.path.join(root_path, f"{item}.toml")
+        data = merge(parse_config(path), data)
+
+    return data
 
 
 def generate_installables(config, routines=None):
     routines = routines or config["meta"].get("defaults", config["routine"].keys())
     for name in routines:
-        routine_obj = config["routine"][name]
-        for step in routine_obj:
+        steps = config[name]["step"]
+        for step in steps:
             i_type = step.pop("type")
             installable = registry[i_type](**step)
             yield installable
@@ -71,7 +81,8 @@ def run(args=sys.argv[1:]):
     config = parse_config(config_path)
 
     if getattr(args, "list", False):
-        print("\n".join(config["routine"].keys()))
+        routines = [key for key in config.keys() if key != "meta"]
+        print("\n".join(sorted(routines)))
         return
 
     for installable in generate_installables(config, routines=args.routines):

@@ -57,7 +57,7 @@ class Command(Installable):
             return False
 
         try:
-            self.run(self.check)
+            self.run(self.checkcmd)
             return True
         except subprocess.CalledProcessError:
             return False
