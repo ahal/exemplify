@@ -52,9 +52,16 @@ def parse_config(path):
 def generate_installables(config, routines=None):
     routines = routines or config["meta"].get("defaults", config["routine"].keys())
     for name in routines:
+        meta = config[name].pop("meta", None)
         steps = config[name]["step"]
         for step in steps:
             i_type = step.pop("type")
+
+            # Interpolate meta data into step values.
+            if meta:
+                for key, val in step.items():
+                    step[key] = val.format(**meta)
+
             installable = registry[i_type](**step)
             yield installable
 
