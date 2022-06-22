@@ -54,4 +54,12 @@ class Mercurial(VCS):
 @register("git")
 class Git(VCS):
     install_command = ["git", "clone"]
-    update_command = ["git", "pull", "origin", "master"]
+
+    def __init__(self, *args, **kwargs):
+        self.branch = kwargs.pop("branch", "main")
+        super().__init__(*args, **kwargs)
+
+    @property
+    def update_command(self):
+        return ["git", "pull", "origin", self.branch]
+
