@@ -6,7 +6,7 @@ from wellington.installables.base import Installable, register
 
 @register("npm")
 class Npm(Installable):
-    def __init__(self, packages, global_=True, npm_path=None):
+    def __init__(self, meta, packages, global_=True, npm_path=None):
         self.packages = packages
         if isinstance(self.packages, str):
             self.packages = [self.packages]

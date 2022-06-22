@@ -8,8 +8,12 @@ from wellington.installables.base import Installable, register
 
 @register("command")
 class Command(Installable):
-    def __init__(self, run, check=None, cwd=None, shell=False):
-        self.runcmd = run
+    def __init__(self, meta, run, check=None, cwd=None, shell=False):
+        self.runcmds = run
+
+        if isinstance(self.runcmds, str):
+            self.runcmds = [self.runcmds]
+
         self.checkcmd = check
         self.shell = shell
 
@@ -63,9 +67,10 @@ class Command(Installable):
             return False
 
     def install(self):
-        self.run(self.runcmd)
+        for cmd in self.runcmds:
+            self.run(cmd)
 
     def __str__(self):
-        return "RUN {} in {}".format(self.runcmd, self.cwd)
+        return f"RUN {' && '.join(self.runcmds)} in {self.cwd}"
 
 

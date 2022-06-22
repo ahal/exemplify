@@ -46,13 +46,17 @@ def parse_config(path):
         path = os.path.join(root_path, f"{item}.toml")
         data = merge(parse_config(path), data)
 
+    data["meta"]["root"] = root_path
     return data
 
 
 def generate_installables(config, routines=None):
-    meta = config.pop("meta")
-    routines = routines or meta.get("defaults", config.keys())
+    g_meta = config.pop("meta")
+    routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
+        pmsg = f"\nPROCESSING ROUTINE {name}"
+        print(pmsg)
+        print("-" * len(pmsg))
         meta = config[name].pop("meta", None)
         steps = config[name]["step"]
         for step in steps:
@@ -63,7 +67,7 @@ def generate_installables(config, routines=None):
                 for key, val in step.items():
                     step[key] = val.format(**meta)
 
-            installable = registry[i_type](**step)
+            installable = registry[i_type](g_meta, **step)
             yield installable
 
 

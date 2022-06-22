@@ -3,15 +3,13 @@ import subprocess
 
 from wellington.installables.base import Installable, register
 
-here = os.path.abspath(os.path.dirname(__file__))
-
 
 @register("link")
 class Link(Installable):
-    def __init__(self, source, dest=None, name=None):
+    def __init__(self, meta, source, dest=None, name=None):
         self.source = os.path.expanduser(source)
         if not os.path.isabs(self.source):
-            self.source = os.path.join(here, source)
+            self.source = os.path.join(meta["root"], source)
 
         self.name = name
         dest = dest or "~"

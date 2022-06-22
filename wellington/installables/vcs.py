@@ -16,7 +16,7 @@ class VCS(Installable, ABC):
     def update_command(self) -> List[str]:
         ...
 
-    def __init__(self, repo, dest, name=None):
+    def __init__(self, meta, repo, dest, name=None):
         self.repo = repo
         self.dest = os.path.expanduser(dest)
         self.name = name

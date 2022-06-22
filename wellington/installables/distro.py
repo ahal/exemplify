@@ -15,7 +15,7 @@ with open("/etc/os-release") as fh:
 
 @register("dnf")
 class Dnf(Installable):
-    def __init__(self, packages):
+    def __init__(self, meta, packages):
         self.packages = packages
         if isinstance(self.packages, str):
             self.packages = [self.packages]
@@ -43,7 +43,7 @@ class Dnf(Installable):
 
 @register("apt")
 class Apt(Installable):
-    def __init__(self, packages):
+    def __init__(self, meta, packages):
         self.packages = packages
         if isinstance(self.packages, str):
             self.packages = [self.packages]
