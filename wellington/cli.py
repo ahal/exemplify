@@ -50,7 +50,8 @@ def parse_config(path):
 
 
 def generate_installables(config, routines=None):
-    routines = routines or config["meta"].get("defaults", config["routine"].keys())
+    meta = config.pop("meta")
+    routines = routines or meta.get("defaults", config.keys())
     for name in routines:
         meta = config[name].pop("meta", None)
         steps = config[name]["step"]
