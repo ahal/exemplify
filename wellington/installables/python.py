@@ -55,7 +55,10 @@ class PipX(Installable):
             subprocess.check_call([self.pipx, "install", self.package])
 
     def update(self):
-        subprocess.check_call([self.pipx, "upgrade", self.package])
+        if self.inject:
+            subprocess.check_call([self.pipx, "upgrade", "--include-injected", self.inject])
+        else:
+            subprocess.check_call([self.pipx, "upgrade", self.package])
 
     def __str__(self):
         return "PIPX INSTALL {}".format(self.package)
