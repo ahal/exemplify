@@ -19,10 +19,10 @@ class Cargo(Installable):
             return False
 
     def install(self):
-        subprocess.check_call([self.cargo, "install", self.packages])
+        subprocess.check_call([self.cargo, "install"] + self.packages)
 
     def update(self):
-        subprocess.check_call([self.cargo, "install", self.packages])
+        subprocess.check_call([self.cargo, "install"] + self.packages)
 
     def __str__(self):
         return f"CARGO INSTALL {', '.join(self.packages)}"
