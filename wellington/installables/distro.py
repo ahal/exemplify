@@ -1,16 +1,7 @@
 import subprocess
+from shutil import which
 
 from wellington.installables.base import Installable, register
-
-
-DISTRO = None
-with open("/etc/os-release") as fh:
-    for line in fh.readlines():
-        line = line.strip()
-        k, v = line.split("=")
-        if k == "ID":
-            DISTRO = v
-            break
 
 
 @register("dnf")
@@ -35,7 +26,7 @@ class Dnf(Installable):
         subprocess.check_call(["sudo", "dnf", "upgrade", "-y"] + self.packages)
 
     def enabled(self):
-        return DISTRO == "fedora"
+        return bool(which("dnf"))
 
     def __str__(self):
         return "DNF INSTALL {}".format(" ".join(self.packages))
@@ -67,7 +58,7 @@ class Apt(Installable):
         subprocess.check_call(["sudo", "apt", "upgrade", "-y"] + self.packages)
 
     def enabled(self):
-        return DISTRO == "ubuntu"
+        return bool(which("apt"))
 
     def __str__(self):
         return "DNF INSTALL {}".format(" ".join(self.packages))
