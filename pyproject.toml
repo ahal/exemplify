@@ -12,7 +12,8 @@ well = 'wellington.cli:run'
 python = "^3.7"
 tomli = "^1.2.2"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.358"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
