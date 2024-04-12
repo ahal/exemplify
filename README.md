@@ -1,3 +1,5 @@
+![CI](https://github.com/ahal/wellington/actions/workflows/ci.yml/badge.svg)
+
 # Wellington
 
 A tool to bootstrap your development environment on new machines.
