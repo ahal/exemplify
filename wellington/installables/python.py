@@ -36,7 +36,7 @@ class Pip(Installable):
 
 @register("pipx")
 class PipX(Installable):
-    def __init__(self, meta: dict, package: str, inject: Optional[str]=None) -> None:
+    def __init__(self, meta: dict, package: str, inject: Optional[str] = None) -> None:
         self.package = package
         self.inject = inject
         self.pipx = os.path.expanduser("~/.pyenv/shims/pipx")

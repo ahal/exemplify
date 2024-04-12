@@ -7,7 +7,6 @@ from wellington.installables.base import Installable, register
 
 
 class VCS(Installable, ABC):
-
     @property
     @abstractmethod
     def install_command(self) -> list[str]: ...
@@ -49,7 +48,6 @@ class VCS(Installable, ABC):
 
 @register("hg")
 class Mercurial(VCS):
-
     @property
     def install_command(self):
         return ["hg", "clone"]
@@ -61,7 +59,6 @@ class Mercurial(VCS):
 
 @register("git")
 class Git(VCS):
-
     def __init__(self, *args, **kwargs) -> None:
         self.branch = kwargs.pop("branch", "main")
         super().__init__(*args, **kwargs)

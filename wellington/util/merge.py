@@ -14,7 +14,7 @@ def merge_to(source, dest):
 
     for key, value in source.items():
         # Override mismatching or empty types
-        if type(value) != type(dest.get(key)):
+        if not isinstance(value, type(dest.get(key))):
             dest[key] = source[key]
             continue
 

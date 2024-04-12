@@ -7,8 +7,8 @@ from wellington.util.python_path import import_sibling_modules
 
 registry = {}
 
-def register(name: str) -> Callable:
 
+def register(name: str) -> Callable:
     def wrap(cls):
         if name not in registry:
             registry[name] = cls
@@ -17,7 +17,6 @@ def register(name: str) -> Callable:
 
 
 class Installable(ABC):
-
     @abstractmethod
     def exists(self) -> bool:
         pass
