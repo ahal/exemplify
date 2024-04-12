@@ -6,12 +6,12 @@ from wellington.installables.base import Installable, register
 
 @register("dnf")
 class Dnf(Installable):
-    def __init__(self, meta, packages):
+    def __init__(self, meta: dict, packages: str | list[str]) -> None:
+        if isinstance(packages, str):
+            packages = [packages]
         self.packages = packages
-        if isinstance(self.packages, str):
-            self.packages = [self.packages]
 
-    def exists(self):
+    def exists(self) -> bool:
         try:
             for package in self.packages:
                 subprocess.check_call(["dnf", "list", "--installed", package])
@@ -19,13 +19,13 @@ class Dnf(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self):
+    def install(self) -> None:
         subprocess.check_call(["sudo", "dnf", "install", "-y"] + self.packages)
 
-    def update(self):
+    def update(self) -> None:
         subprocess.check_call(["sudo", "dnf", "upgrade", "-y"] + self.packages)
 
-    def enabled(self):
+    def enabled(self) -> bool:
         return bool(which("dnf"))
 
     def __str__(self):
@@ -34,12 +34,12 @@ class Dnf(Installable):
 
 @register("apt")
 class Apt(Installable):
-    def __init__(self, meta, packages):
+    def __init__(self, meta: dict, packages: str | list[str]):
+        if isinstance(packages, str):
+            packages = [packages]
         self.packages = packages
-        if isinstance(self.packages, str):
-            self.packages = [self.packages]
 
-    def exists(self):
+    def exists(self) -> bool:
         try:
             for package in self.packages:
                 subprocess.check_call(
@@ -51,13 +51,13 @@ class Apt(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self):
+    def install(self) -> None:
         subprocess.check_call(["sudo", "apt", "install", "-y"] + self.packages)
 
-    def update(self):
+    def update(self) -> None:
         subprocess.check_call(["sudo", "apt", "upgrade", "-y"] + self.packages)
 
-    def enabled(self):
+    def enabled(self) -> bool:
         return bool(which("apt"))
 
     def __str__(self):

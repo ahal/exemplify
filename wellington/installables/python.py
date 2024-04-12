@@ -1,31 +1,33 @@
 import os
 import subprocess
+from typing import Optional
 
 from wellington.installables.base import Installable, register
 
 
 @register("pip")
 class Pip(Installable):
-    def __init__(self, meta, packages, pip_path=None):
+    def __init__(
+        self, meta: dict, packages: str | list[str], pip_path: Optional[str] = None
+    ) -> None:
+        if isinstance(packages, str):
+            packages = [packages]
         self.packages = packages
-
-        if isinstance(self.packages, str):
-            self.packages = [self.packages]
 
         pip_path = pip_path or "~/.pyenv/shims/pip"
         self.pip = os.path.expanduser(pip_path)
 
-    def exists(self):
+    def exists(self) -> bool:
         try:
             output = subprocess.check_output([self.pip, "list"], text=True)
             return all(p in output for p in self.packages)
         except subprocess.CalledProcessError:
             return False
 
-    def install(self):
+    def install(self) -> None:
         subprocess.check_call([self.pip, "install"] + self.packages)
 
-    def update(self):
+    def update(self) -> None:
         subprocess.check_call([self.pip, "install", "--upgrade"] + self.packages)
 
     def __str__(self):
@@ -34,12 +36,12 @@ class Pip(Installable):
 
 @register("pipx")
 class PipX(Installable):
-    def __init__(self, meta, package, inject=None):
+    def __init__(self, meta: dict, package: str, inject: Optional[str]=None) -> None:
         self.package = package
         self.inject = inject
         self.pipx = os.path.expanduser("~/.pyenv/shims/pipx")
 
-    def exists(self):
+    def exists(self) -> bool:
         try:
             output = subprocess.check_output(
                 [self.pipx, "list", "--include-injected"], text=True
@@ -48,15 +50,17 @@ class PipX(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self):
+    def install(self) -> None:
         if self.inject:
             subprocess.check_call([self.pipx, "inject", self.inject, self.package])
         else:
             subprocess.check_call([self.pipx, "install", self.package])
 
-    def update(self):
+    def update(self) -> None:
         if self.inject:
-            subprocess.check_call([self.pipx, "upgrade", "--include-injected", self.inject])
+            subprocess.check_call(
+                [self.pipx, "upgrade", "--include-injected", self.inject]
+            )
         else:
             subprocess.check_call([self.pipx, "upgrade", self.package])
 

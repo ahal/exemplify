@@ -1,22 +1,24 @@
 import os
 import subprocess
-from abc import ABC, abstractproperty
-from typing import List
+from abc import ABC, abstractmethod
+from typing import Optional
 
 from wellington.installables.base import Installable, register
 
 
 class VCS(Installable, ABC):
 
-    @abstractproperty
-    def install_command(self) -> List[str]:
-        ...
+    @property
+    @abstractmethod
+    def install_command(self) -> list[str]: ...
 
-    @abstractproperty
-    def update_command(self) -> List[str]:
-        ...
+    @property
+    @abstractmethod
+    def update_command(self) -> list[str]: ...
 
-    def __init__(self, meta, repo, dest, name=None):
+    def __init__(
+        self, meta: dict, repo: str, dest: str, name: Optional[str] = None
+    ) -> None:
         self.repo = repo
         self.dest = os.path.expanduser(dest)
         self.name = name
@@ -24,10 +26,10 @@ class VCS(Installable, ABC):
         name = self.name or self.repo.rstrip("/").rsplit("/", 1)[1]
         self.path = os.path.join(self.dest, name)
 
-    def exists(self):
+    def exists(self) -> bool:
         return os.path.isdir(self.path)
 
-    def install(self):
+    def install(self) -> None:
         if not os.path.isdir(self.dest):
             os.makedirs(self.dest)
         cmd = self.install_command[:]
@@ -38,7 +40,7 @@ class VCS(Installable, ABC):
 
         subprocess.check_call(cmd, cwd=self.dest)
 
-    def update(self):
+    def update(self) -> None:
         subprocess.check_call(self.update_command, cwd=self.path)
 
     def __str__(self):
@@ -47,19 +49,27 @@ class VCS(Installable, ABC):
 
 @register("hg")
 class Mercurial(VCS):
-    install_command = ["hg", "clone"]
-    update_command = ["hg", "pull", "--update"]
+
+    @property
+    def install_command(self):
+        return ["hg", "clone"]
+
+    @property
+    def update_command(self):
+        return ["hg", "pull", "--update"]
 
 
 @register("git")
 class Git(VCS):
-    install_command = ["git", "clone"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.branch = kwargs.pop("branch", "main")
         super().__init__(*args, **kwargs)
 
     @property
+    def install_command(self):
+        return ["git", "clone"]
+
+    @property
     def update_command(self):
         return ["git", "pull", "origin", self.branch]
-

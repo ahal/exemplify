@@ -5,11 +5,13 @@ from wellington.installables.base import Installable, register
 
 @register("cargo")
 class Cargo(Installable):
-    def __init__(self, meta, packages):
+    def __init__(self, meta: dict, packages: str | list[str]):
+        if isinstance(packages, str):
+            packages = [packages]
         self.packages = packages
         self.cargo = "cargo"
 
-    def exists(self):
+    def exists(self) -> bool:
         try:
             output = subprocess.check_output(
                 [self.cargo, "install", "--list"], text=True
@@ -18,10 +20,10 @@ class Cargo(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self):
+    def install(self) -> None:
         subprocess.check_call([self.cargo, "install"] + self.packages)
 
-    def update(self):
+    def update(self) -> None:
         subprocess.check_call([self.cargo, "install"] + self.packages)
 
     def __str__(self):

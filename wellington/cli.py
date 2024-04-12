@@ -2,17 +2,15 @@ import os
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
+from typing import Optional
 
 import tomli
 
-from wellington.installables.base import registry
+from wellington.installables.base import Installable, registry
 from wellington.util.merge import merge
 
 
-here = os.path.abspath(os.path.dirname(__file__))
-
-
-def install(item):
+def install(item: Installable) -> None:
     if not item.enabled():
         return
     if item.exists():
@@ -23,7 +21,7 @@ def install(item):
     item.install()
 
 
-def update(item):
+def update(item: Installable) -> None:
     if not item.enabled():
         return
     print("####")
@@ -35,10 +33,10 @@ def update(item):
         item.install()
 
 
-def parse_config(path):
+def parse_config(path: str) -> dict:
     root_path = os.path.dirname(path)
 
-    with open(path) as fh:
+    with open(path, "rb") as fh:
         data = tomli.load(fh)
 
     data.setdefault("meta", {})
@@ -50,7 +48,7 @@ def parse_config(path):
     return data
 
 
-def generate_installables(config, routines=None):
+def generate_installables(config: dict, routines: Optional[list[str]] = None):
     g_meta = config.pop("meta")
     routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
@@ -90,7 +88,7 @@ def run(args=sys.argv[1:]):
     args = parser.parse_args(args)
 
     config_path = Path(os.getcwd()) / "wellington.toml"
-    config = parse_config(config_path)
+    config = parse_config(str(config_path))
 
     if getattr(args, "list", False):
         routines = [key for key in config.keys() if key != "meta"]

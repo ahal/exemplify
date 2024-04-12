@@ -1,12 +1,13 @@
 import os
 from abc import ABC, abstractmethod
+from typing import Callable
 
 from wellington.util.python_path import import_sibling_modules
 
 
 registry = {}
 
-def register(name):
+def register(name: str) -> Callable:
 
     def wrap(cls):
         if name not in registry:
@@ -18,17 +19,17 @@ def register(name):
 class Installable(ABC):
 
     @abstractmethod
-    def exists(self):
+    def exists(self) -> bool:
         pass
 
     @abstractmethod
-    def install(self):
+    def install(self) -> None:
         pass
 
-    def update(self):
+    def update(self) -> None:
         print("Update not implemented")
 
-    def enabled(self):
+    def enabled(self) -> bool:
         return True
 
 
