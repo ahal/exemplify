@@ -18,13 +18,14 @@ class Link(Installable):
         if not os.path.isabs(self.source):
             self.source = os.path.join(meta["root"], source)
 
-        self.name = name
         dest = dest or "~"
         dest = os.path.expanduser(dest)
         if os.path.isdir(dest):
             self.dest = dest
-            if not self.name:
+            if not name:
                 self.name = os.path.basename(source)
+            else:
+                self.name = name
         else:
             self.dest, self.name = os.path.split(dest)
         self.path = os.path.join(self.dest, self.name)

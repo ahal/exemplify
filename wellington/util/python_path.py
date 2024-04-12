@@ -12,6 +12,8 @@ def import_sibling_modules(exceptions=None):
     """
     frame = inspect.stack()[1]
     mod = inspect.getmodule(frame[0])
+    assert mod
+    assert mod.__file__
 
     name = os.path.basename(mod.__file__)
     excs = {"__init__.py", name}
