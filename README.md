@@ -23,8 +23,8 @@ Or `pipx`:
 
 To install your environment:
 
-    $ well install [ROUTINE]
+    $ ditto install [ROUTINE]
 
 To update your environment:
 
-    $ well update [ROUTINE]
+    $ ditto update [ROUTINE]
