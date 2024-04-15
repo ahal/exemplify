@@ -2,7 +2,7 @@ import os
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from wellington.util.python_path import import_sibling_modules
+from dittoed.util.python_path import import_sibling_modules
 
 
 registry = {}

@@ -1,6 +1,6 @@
 import subprocess
 
-from wellington.installables.base import Installable, register
+from dittoed.installables.base import Installable, register
 
 
 @register("cargo")

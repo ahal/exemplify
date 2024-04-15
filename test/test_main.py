@@ -1,7 +1,7 @@
 import pytest
 
-from wellington.installables.base import registry
-from wellington.main import generate_installables
+from dittoed.installables.base import registry
+from dittoed.main import generate_installables
 
 
 def defaults(_type):

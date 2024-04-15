@@ -3,7 +3,7 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
-from wellington import install, update, parse_config, generate_installables
+from dittoed import install, update, parse_config, generate_installables
 
 
 def run(args=sys.argv[1:]):
@@ -24,7 +24,7 @@ def run(args=sys.argv[1:]):
     list_parser.set_defaults(**{"list": True})
     args = parser.parse_args(args)
 
-    config_path = Path(os.getcwd()) / "wellington.toml"
+    config_path = Path(os.getcwd()) / "ditto.toml"
     config = parse_config(str(config_path))
 
     if getattr(args, "list", False):

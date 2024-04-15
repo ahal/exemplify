@@ -3,7 +3,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from wellington.installables.base import Installable, register
+from dittoed.installables.base import Installable, register
 
 
 class VCS(Installable, ABC):

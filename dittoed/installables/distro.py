@@ -1,7 +1,7 @@
 import subprocess
 from shutil import which
 
-from wellington.installables.base import Installable, register
+from dittoed.installables.base import Installable, register
 
 
 @register("dnf")

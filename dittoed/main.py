@@ -3,8 +3,8 @@ from typing import Optional
 
 import tomli
 
-from wellington.installables.base import Installable, registry
-from wellington.util.merge import merge
+from dittoed.installables.base import Installable, registry
+from dittoed.util.merge import merge
 
 
 def install(item: Installable) -> None:

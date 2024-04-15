@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 from typing import Optional
 
-from wellington.installables.base import Installable, register
+from dittoed.installables.base import Installable, register
 
 
 @register("command")

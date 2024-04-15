@@ -1,12 +1,13 @@
 [tool.poetry]
-name = "wellington"
-version = "0.2.1"
+name = "dittoed"
+version = "0.3.0"
 description = "A tool to help bootstrap your dev environment."
 authors = ["Andrew Halberstadt <ahal@pm.me>"]
 license = "MPL-2.0"
 
 [tool.poetry.scripts]
-well = 'wellington.cli:run'
+ditto = 'dittoed.cli:run'
+dittoed = 'dittoed.cli:run'
 
 [tool.poetry.dependencies]
 python = "^3.10"
