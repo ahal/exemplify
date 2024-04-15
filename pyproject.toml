@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dittoed"
-version = "0.3.0"
+version = "0.4.0"
 description = "A tool to help bootstrap your dev environment."
 authors = ["Andrew Halberstadt <ahal@pm.me>"]
 license = "MPL-2.0"
