@@ -3,6 +3,7 @@ name = "dittoed"
 version = "0.4.0"
 description = "A tool to help bootstrap your dev environment."
 readme = "README.md"
+repository = "https://github.com/ahal/dittoed"
 authors = ["Andrew Halberstadt <ahal@pm.me>"]
 license = "MPL-2.0"
 
