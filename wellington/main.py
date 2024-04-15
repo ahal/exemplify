@@ -46,7 +46,7 @@ def parse_config(path: str) -> dict:
 
 
 def generate_installables(config: dict, routines: Optional[list[str]] = None):
-    g_meta = config.pop("meta")
+    g_meta = config.pop("meta", {})
     routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
         pmsg = f"\nPROCESSING ROUTINE {name}"
