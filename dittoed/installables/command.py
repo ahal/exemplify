@@ -78,7 +78,7 @@ class Command(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self) -> None:
+    def sync(self) -> None:
         for cmd in self.runcmds:
             self.run(cmd)
 

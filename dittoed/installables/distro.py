@@ -19,11 +19,11 @@ class Dnf(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self) -> None:
-        subprocess.check_call(["sudo", "dnf", "install", "-y"] + self.packages)
-
-    def update(self) -> None:
-        subprocess.check_call(["sudo", "dnf", "upgrade", "-y"] + self.packages)
+    def sync(self) -> None:
+        if self.exists():
+            subprocess.check_call(["sudo", "dnf", "upgrade", "-y"] + self.packages)
+        else:
+            subprocess.check_call(["sudo", "dnf", "install", "-y"] + self.packages)
 
     def enabled(self) -> bool:
         return bool(which("dnf"))
@@ -51,14 +51,14 @@ class Apt(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self) -> None:
-        subprocess.check_call(["sudo", "apt", "install", "-y"] + self.packages)
-
-    def update(self) -> None:
-        subprocess.check_call(["sudo", "apt", "upgrade", "-y"] + self.packages)
+    def sync(self) -> None:
+        if self.exists():
+            subprocess.check_call(["sudo", "apt", "upgrade", "-y"] + self.packages)
+        else:
+            subprocess.check_call(["sudo", "apt", "install", "-y"] + self.packages)
 
     def enabled(self) -> bool:
         return bool(which("apt"))
 
     def __str__(self):
-        return "DNF INSTALL {}".format(" ".join(self.packages))
+        return "APT INSTALL {}".format(" ".join(self.packages))

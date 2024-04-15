@@ -30,12 +30,10 @@ class Link(Installable):
             self.dest, self.name = os.path.split(dest)
         self.path = os.path.join(self.dest, self.name)
 
-    def exists(self) -> bool:
+    def sync(self) -> None:
         if os.path.lexists(self.path):
             os.remove(self.path)
-        return False
 
-    def install(self) -> None:
         if not os.path.isdir(self.dest):
             os.makedirs(self.dest)
 
