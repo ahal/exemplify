@@ -32,11 +32,11 @@ class Npm(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self) -> None:
-        subprocess.check_call(self.args + self.packages)
-
-    def update(self) -> None:
-        subprocess.check_call(self.args + ["--upgrade"] + self.packages)
+    def sync(self) -> None:
+        if self.exists():
+            subprocess.check_call(self.args + ["--upgrade"] + self.packages)
+        else:
+            subprocess.check_call(self.args + self.packages)
 
     def __str__(self):
         return "NPM INSTALL {}".format(" ".join(self.packages))

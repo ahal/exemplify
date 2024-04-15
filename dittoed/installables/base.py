@@ -18,15 +18,8 @@ def register(name: str) -> Callable:
 
 class Installable(ABC):
     @abstractmethod
-    def exists(self) -> bool:
+    def sync(self) -> None:
         pass
-
-    @abstractmethod
-    def install(self) -> None:
-        pass
-
-    def update(self) -> None:
-        print("Update not implemented")
 
     def enabled(self) -> bool:
         return True

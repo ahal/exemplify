@@ -11,19 +11,7 @@ class Cargo(Installable):
         self.packages = packages
         self.cargo = "cargo"
 
-    def exists(self) -> bool:
-        try:
-            output = subprocess.check_output(
-                [self.cargo, "install", "--list"], text=True
-            )
-            return all(p in output for p in self.packages)
-        except subprocess.CalledProcessError:
-            return False
-
-    def install(self) -> None:
-        subprocess.check_call([self.cargo, "install"] + self.packages)
-
-    def update(self) -> None:
+    def sync(self) -> None:
         subprocess.check_call([self.cargo, "install"] + self.packages)
 
     def __str__(self):

@@ -24,11 +24,11 @@ class Pip(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self) -> None:
-        subprocess.check_call([self.pip, "install"] + self.packages)
-
-    def update(self) -> None:
-        subprocess.check_call([self.pip, "install", "--upgrade"] + self.packages)
+    def sync(self) -> None:
+        args = [self.pip, "install"]
+        if self.exists():
+            args.append("--upgrade")
+        subprocess.check_call(args + self.packages)
 
     def __str__(self):
         return f"PIP INSTALL {', '.join(self.packages)}"
@@ -50,19 +50,19 @@ class PipX(Installable):
         except subprocess.CalledProcessError:
             return False
 
-    def install(self) -> None:
-        if self.inject:
-            subprocess.check_call([self.pipx, "inject", self.inject, self.package])
+    def sync(self) -> None:
+        if self.exists():
+            if self.inject:
+                subprocess.check_call(
+                    [self.pipx, "upgrade", "--include-injected", self.inject]
+                )
+            else:
+                subprocess.check_call([self.pipx, "upgrade", self.package])
         else:
-            subprocess.check_call([self.pipx, "install", self.package])
-
-    def update(self) -> None:
-        if self.inject:
-            subprocess.check_call(
-                [self.pipx, "upgrade", "--include-injected", self.inject]
-            )
-        else:
-            subprocess.check_call([self.pipx, "upgrade", self.package])
+            if self.inject:
+                subprocess.check_call([self.pipx, "inject", self.inject, self.package])
+            else:
+                subprocess.check_call([self.pipx, "install", self.package])
 
     def __str__(self):
         return "PIPX INSTALL {}".format(self.package)

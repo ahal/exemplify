@@ -7,27 +7,13 @@ from dittoed.installables.base import Installable, registry
 from dittoed.util.merge import merge
 
 
-def install(item: Installable) -> None:
-    if not item.enabled():
-        return
-    if item.exists():
-        return
-    print("####")
-    print(item)
-    print("####")
-    item.install()
-
-
-def update(item: Installable) -> None:
+def synchronize(item: Installable) -> None:
     if not item.enabled():
         return
     print("####")
     print(item)
     print("####")
-    if item.exists():
-        item.update()
-    else:
-        item.install()
+    item.sync()
 
 
 def parse_config(path: str) -> dict:
