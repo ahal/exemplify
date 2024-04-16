@@ -1,6 +1,9 @@
-import pytest
+from dittoed.installables.base import Installable
 
 
-@pytest.fixture
-def config():
-    return {"meta": {"defaults": ["foo", "bar"]}}
+class FakeInstallable(Installable):
+    def __init__(self, meta: dict, key) -> None:
+        self.key = key
+
+    def sync(self, *args, **kwargs):
+        pass
