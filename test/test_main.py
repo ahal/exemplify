@@ -1,7 +1,89 @@
+from pprint import pprint
+from textwrap import dedent
+
 import pytest
 
-from dittoed.installables.base import registry
-from dittoed.main import generate_installables
+from dittoed import main
+
+from conftest import FakeInstallable
+
+
+def test_synchronize(mocker):
+    ins = FakeInstallable({}, "key")
+    m_sync = mocker.patch.object(ins, "sync")
+    m_enabled = mocker.patch.object(ins, "enabled")
+    m_enabled.return_value = False
+
+    main.synchronize(ins)
+    m_enabled.assert_called_once_with()
+    m_sync.assert_not_called()
+
+    m_enabled.return_value = True
+    main.synchronize(ins)
+    m_sync.assert_called_once_with()
+
+
+@pytest.mark.parametrize(
+    "config, expected",
+    (
+        pytest.param(
+            "",
+            {"meta": {"root": ""}},
+            id="empty",
+        ),
+        pytest.param(
+            dedent(
+                """
+        [[foo.step]]
+        type = "command"
+        run = "echo hello"
+        """
+            ),
+            {
+                "foo": {"step": [{"type": "command", "run": "echo hello"}]},
+                "meta": {"root": ""},
+            },
+            id="basic",
+        ),
+    ),
+)
+def test_parse_config(mocker, config, expected):
+    m = mocker.patch("builtins.open", mocker.mock_open(read_data=config))
+
+    result = main.parse_config("path")
+    m.assert_called_once_with("path", "rb")
+    assert result == expected
+
+
+def test_parse_config_include(mocker):
+    mock1 = mocker.MagicMock()
+    mock1.read.return_value = b"""
+    [meta]
+    include = ["other"]
+
+    [[foo.step]]
+    type = "foo"
+    """
+
+    mock2 = mocker.MagicMock()
+    mock2.read.return_value = b"""
+    [[bar.step]]
+    type = "bar"
+    """
+
+    open_mock = mocker.mock_open()
+    open_mock.return_value.__enter__.side_effect = [mock1, mock2]
+
+    mocker.patch("builtins.open", open_mock)
+
+    result = main.parse_config("ditto.toml")
+    print("Dump for copy/paste:")
+    pprint(result, indent=2)
+    assert result == {
+        "bar": {"step": [{"type": "bar"}]},
+        "foo": {"step": [{"type": "foo"}]},
+        "meta": {"root": ""},
+    }
 
 
 def defaults(_type):
@@ -18,27 +100,53 @@ def defaults(_type):
     return {}
 
 
-@pytest.mark.parametrize("name", registry.keys())
+@pytest.mark.parametrize("name", main.registry.keys())
 def test_generate_installables_basic(name):
     step = {"type": name}
     step.update(defaults(name))
     config = {"meta": {"root": "cwd"}, name: {"step": [step]}}
 
-    installables = list(generate_installables(config, [name]))
+    installables = list(main.generate_installables(config, [name]))
     assert len(installables) == 1
-    assert isinstance(installables[0], registry[name])
+    assert isinstance(installables[0], main.registry[name])
+
+
+def assert_empty(installables):
+    assert installables == []
+
+
+assert_no_step = assert_empty
+
+
+def assert_interpolate(installables):
+    assert len(installables) == 1
+    ins = installables[0]
+    assert isinstance(ins, FakeInstallable)
+    assert ins.key == "some thing"
 
 
 @pytest.mark.parametrize(
-    "config,routines,expected",
+    "config,routines",
     (
-        pytest.param({}, [], [], id="empty"),
-        pytest.param({"foo": {"step": []}}, ["foo"], [], id="no step"),
+        pytest.param({}, [], id="empty"),
+        pytest.param({"foo": {"step": []}}, ["foo"], id="no_step"),
+        pytest.param(
+            {
+                "foo": {
+                    "meta": {"value": "thing"},
+                    "step": [{"type": "foo", "key": "some {value}"}],
+                },
+            },
+            ["foo"],
+            id="interpolate",
+        ),
     ),
 )
-def test_generate_installables_custom(config, routines, expected):
-    installables = list(generate_installables(config, routines))
-    assert len(installables) == len(expected)
+def test_generate_installables_custom(request, mocker, config, routines):
+    mocker.patch.dict(main.registry, {"foo": FakeInstallable, "bar": FakeInstallable})
 
-    for i, installable in enumerate(installables):
-        assert isinstance(installable, expected[i])
+    installables = list(main.generate_installables(config, routines))
+
+    param_id = request.node.callspec.id
+    assert_func = globals()[f"assert_{param_id}"]
+    assert_func(installables)
