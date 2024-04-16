@@ -1,5 +1,6 @@
 ![CI](https://github.com/ahal/dittoed/actions/workflows/ci.yml/badge.svg)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/ahal/dittoed/main.svg)](https://results.pre-commit.ci/latest/github/ahal/dittoed/main)
+[![codecov](https://codecov.io/gh/ahal/dittoed/graph/badge.svg?token=SWKS7WE0BQ)](https://codecov.io/gh/ahal/dittoed)
 [![PyPI version](https://badge.fury.io/py/dittoed.svg)](https://badge.fury.io/py/dittoed)
 [![License](https://img.shields.io/badge/license-MPL%202.0-orange.svg)](http://mozilla.org/MPL/2.0)
 
