@@ -32,7 +32,7 @@ class Command(Installable):
 
     def run(self, command: str) -> None:
         for cmd in command.split("&&"):
-            print(f"+ {cmd}")
+            print(f"+ {cmd.strip()}")
             if "|" not in cmd:
                 if not self.shell:
                     cmd = shlex.split(cmd)
@@ -48,7 +48,11 @@ class Command(Installable):
 
                 if i == 0:
                     proc = subprocess.Popen(
-                        subcmd, stdout=subprocess.PIPE, cwd=self.cwd, shell=self.shell
+                        subcmd,
+                        stdout=subprocess.PIPE,
+                        cwd=self.cwd,
+                        shell=self.shell,
+                        text=True,
                     )
                 else:
                     assert proc
@@ -58,6 +62,7 @@ class Command(Installable):
                         stdin=proc.stdout,
                         cwd=self.cwd,
                         shell=self.shell,
+                        text=True,
                     )
 
             assert proc
