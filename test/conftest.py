@@ -23,5 +23,3 @@ def make_installable(request, meta):
         return registry[kind](meta, *args, **kwargs)
 
     return inner
-
-
