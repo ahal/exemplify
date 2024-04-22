@@ -24,4 +24,4 @@ Or `pipx`:
 
 To sync your environment:
 
-    $ exemplify [ROUTINE]
+    $ exemplify [EXEMPLAR]

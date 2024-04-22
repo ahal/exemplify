@@ -35,7 +35,7 @@ def generate_steps(config: dict, routines: Optional[list[str]] = None):
     g_meta = config.pop("meta", {})
     routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
-        pmsg = f"\nPROCESSING ROUTINE {name}"
+        pmsg = f"\nPROCESSING routine {name}"
         print(pmsg)
         print("-" * len(pmsg))
         meta = config[name].pop("meta", None)
