@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from dittoed.steps import distro
+from exemplify.steps import distro
 
 
 @pytest.mark.parametrize(

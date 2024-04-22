@@ -1,5 +1,5 @@
 import pytest
-from dittoed.steps.base import Step, registry
+from exemplify.steps.base import Step, registry
 
 
 class FakeStep(Step):

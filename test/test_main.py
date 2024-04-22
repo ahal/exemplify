@@ -3,7 +3,7 @@ from textwrap import dedent
 
 import pytest
 
-from dittoed import main
+from exemplify import main
 
 from conftest import FakeStep
 
@@ -76,7 +76,7 @@ def test_parse_config_include(mocker):
 
     mocker.patch("builtins.open", open_mock)
 
-    result = main.parse_config("ditto.toml")
+    result = main.parse_config("exemplify.toml")
     print("Dump for copy/paste:")
     pprint(result, indent=2)
     assert result == {

@@ -1,6 +1,6 @@
 import subprocess
 
-from dittoed.steps.base import Step, register
+from exemplify.steps.base import Step, register
 
 
 @register("cargo")

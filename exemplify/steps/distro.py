@@ -1,7 +1,7 @@
 import subprocess
 from shutil import which
 
-from dittoed.steps.base import Step, register
+from exemplify.steps.base import Step, register
 
 
 @register("dnf")

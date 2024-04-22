@@ -3,7 +3,7 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
-from dittoed import synchronize, parse_config, generate_steps
+from exemplify import synchronize, parse_config, generate_steps
 
 
 def run(args=sys.argv[1:]):
@@ -15,7 +15,7 @@ def run(args=sys.argv[1:]):
 
     args = parser.parse_args(args)
 
-    config_path = Path(os.getcwd()) / "ditto.toml"
+    config_path = Path(os.getcwd()) / "exemplify.toml"
     config = parse_config(str(config_path))
 
     if args.list:

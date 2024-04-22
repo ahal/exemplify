@@ -3,8 +3,8 @@ from typing import Optional
 
 import tomli
 
-from dittoed.steps.base import Step, registry
-from dittoed.util.merge import merge
+from exemplify.steps.base import Step, registry
+from exemplify.util.merge import merge
 
 
 def synchronize(item: Step) -> None:

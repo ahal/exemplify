@@ -3,7 +3,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from dittoed.steps.base import Step, register
+from exemplify.steps.base import Step, register
 
 
 class VCS(Step, ABC):

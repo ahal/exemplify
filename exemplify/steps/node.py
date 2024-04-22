@@ -2,7 +2,7 @@ import os
 import subprocess
 from typing import Optional
 
-from dittoed.steps.base import Step, register
+from exemplify.steps.base import Step, register
 
 
 @register("npm")

@@ -4,7 +4,7 @@ import subprocess
 import tempfile
 from typing import Optional
 
-from dittoed.steps.base import Step, register
+from exemplify.steps.base import Step, register
 
 
 @register("command")
