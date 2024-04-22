@@ -1,10 +1,10 @@
 import subprocess
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
 @register("cargo")
-class Cargo(Installable):
+class Cargo(Step):
     def __init__(self, meta: dict, packages: str | list[str]):
         if isinstance(packages, str):
             packages = [packages]

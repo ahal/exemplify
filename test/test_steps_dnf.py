@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from dittoed.installables import distro
+from dittoed.steps import distro
 
 
 @pytest.mark.parametrize(
@@ -27,10 +27,10 @@ from dittoed.installables import distro
         ),
     ),
 )
-def test_dnf_sync(make_installable, mocker, kwargs, expected):
+def test_dnf_sync(make_step, mocker, kwargs, expected):
     m = mocker.patch.object(distro.subprocess, "check_call")
 
-    ins = make_installable(**kwargs)
+    ins = make_step(**kwargs)
     if inspect.isclass(expected) and issubclass(expected, Exception):
         with pytest.raises(expected):
             ins.sync()

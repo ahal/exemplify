@@ -59,8 +59,8 @@ import pytest
         ),
     ),
 )
-def test_command_sync(make_installable, capfd, kwargs, expected):
-    ins = make_installable(**kwargs)
+def test_command_sync(make_step, capfd, kwargs, expected):
+    ins = make_step(**kwargs)
     if inspect.isclass(expected) and issubclass(expected, Exception):
         with pytest.raises(expected):
             ins.sync()

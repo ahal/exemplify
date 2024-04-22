@@ -3,10 +3,10 @@ import subprocess
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
-class VCS(Installable, ABC):
+class VCS(Step, ABC):
     @property
     @abstractmethod
     def install_command(self) -> list[str]: ...

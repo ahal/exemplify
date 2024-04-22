@@ -5,11 +5,11 @@ import pytest
 
 from dittoed import main
 
-from conftest import FakeInstallable
+from conftest import FakeStep
 
 
 def test_synchronize(mocker):
-    ins = FakeInstallable({}, "key")
+    ins = FakeStep({}, "key")
     m_sync = mocker.patch.object(ins, "sync")
     m_enabled = mocker.patch.object(ins, "enabled")
     m_enabled.return_value = False
@@ -101,27 +101,27 @@ def defaults(_type):
 
 
 @pytest.mark.parametrize("name", main.registry.keys())
-def test_generate_installables_basic(name):
+def test_generate_steps_basic(name):
     step = {"type": name}
     step.update(defaults(name))
     config = {"meta": {"root": "cwd"}, name: {"step": [step]}}
 
-    installables = list(main.generate_installables(config, [name]))
-    assert len(installables) == 1
-    assert isinstance(installables[0], main.registry[name])
+    steps = list(main.generate_steps(config, [name]))
+    assert len(steps) == 1
+    assert isinstance(steps[0], main.registry[name])
 
 
-def assert_empty(installables):
-    assert installables == []
+def assert_empty(steps):
+    assert steps == []
 
 
 assert_no_step = assert_empty
 
 
-def assert_interpolate(installables):
-    assert len(installables) == 1
-    ins = installables[0]
-    assert isinstance(ins, FakeInstallable)
+def assert_interpolate(steps):
+    assert len(steps) == 1
+    ins = steps[0]
+    assert isinstance(ins, FakeStep)
     assert ins.key == "some thing"
 
 
@@ -142,11 +142,11 @@ def assert_interpolate(installables):
         ),
     ),
 )
-def test_generate_installables_custom(request, mocker, config, routines):
-    mocker.patch.dict(main.registry, {"foo": FakeInstallable, "bar": FakeInstallable})
+def test_generate_steps_custom(request, mocker, config, routines):
+    mocker.patch.dict(main.registry, {"foo": FakeStep, "bar": FakeStep})
 
-    installables = list(main.generate_installables(config, routines))
+    steps = list(main.generate_steps(config, routines))
 
     param_id = request.node.callspec.id
     assert_func = globals()[f"assert_{param_id}"]
-    assert_func(installables)
+    assert_func(steps)

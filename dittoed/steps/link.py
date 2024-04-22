@@ -2,11 +2,11 @@ import os
 import subprocess
 from typing import Optional
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
 @register("link")
-class Link(Installable):
+class Link(Step):
     def __init__(
         self,
         meta: dict,

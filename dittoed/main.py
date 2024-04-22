@@ -3,11 +3,11 @@ from typing import Optional
 
 import tomli
 
-from dittoed.installables.base import Installable, registry
+from dittoed.steps.base import Step, registry
 from dittoed.util.merge import merge
 
 
-def synchronize(item: Installable) -> None:
+def synchronize(item: Step) -> None:
     if not item.enabled():
         return
     print("####")
@@ -31,7 +31,7 @@ def parse_config(path: str) -> dict:
     return data
 
 
-def generate_installables(config: dict, routines: Optional[list[str]] = None):
+def generate_steps(config: dict, routines: Optional[list[str]] = None):
     g_meta = config.pop("meta", {})
     routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
@@ -48,5 +48,5 @@ def generate_installables(config: dict, routines: Optional[list[str]] = None):
                 for key, val in step.items():
                     step[key] = val.format(**meta)
 
-            installable = registry[i_type](g_meta, **step)
-            yield installable
+            step = registry[i_type](g_meta, **step)
+            yield step

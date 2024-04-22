@@ -16,7 +16,7 @@ def register(name: str) -> Callable:
     return wrap
 
 
-class Installable(ABC):
+class Step(ABC):
     @abstractmethod
     def sync(self) -> None:
         pass
@@ -25,5 +25,5 @@ class Installable(ABC):
         return True
 
 
-# Trigger installable registration.
+# Trigger step registration.
 import_sibling_modules(exceptions=os.path.basename(__file__))

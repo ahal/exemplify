@@ -3,7 +3,7 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
-from dittoed import synchronize, parse_config, generate_installables
+from dittoed import synchronize, parse_config, generate_steps
 
 
 def run(args=sys.argv[1:]):
@@ -23,5 +23,5 @@ def run(args=sys.argv[1:]):
         print("\n".join(sorted(routines)))
         return
 
-    for installable in generate_installables(config, routines=args.routines):
-        synchronize(installable)
+    for step in generate_steps(config, routines=args.routines):
+        synchronize(step)

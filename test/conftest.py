@@ -1,8 +1,8 @@
 import pytest
-from dittoed.installables.base import Installable, registry
+from dittoed.steps.base import Step, registry
 
 
-class FakeInstallable(Installable):
+class FakeStep(Step):
     def __init__(self, meta: dict, key) -> None:
         self.key = key
 
@@ -16,8 +16,8 @@ def meta():
 
 
 @pytest.fixture
-def make_installable(request, meta):
-    kind = request.module.__name__[len("test_installables_") :]
+def make_step(request, meta):
+    kind = request.module.__name__[len("test_steps_") :]
 
     def inner(*args, **kwargs):
         return registry[kind](meta, *args, **kwargs)

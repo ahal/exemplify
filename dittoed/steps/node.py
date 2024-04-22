@@ -2,11 +2,11 @@ import os
 import subprocess
 from typing import Optional
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
 @register("npm")
-class Npm(Installable):
+class Npm(Step):
     def __init__(
         self,
         meta: dict,

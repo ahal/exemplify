@@ -1,11 +1,11 @@
 import subprocess
 from shutil import which
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
 @register("dnf")
-class Dnf(Installable):
+class Dnf(Step):
     def __init__(self, meta: dict, packages: str | list[str]) -> None:
         if isinstance(packages, str):
             packages = [packages]
@@ -33,7 +33,7 @@ class Dnf(Installable):
 
 
 @register("apt")
-class Apt(Installable):
+class Apt(Step):
     def __init__(self, meta: dict, packages: str | list[str]):
         if isinstance(packages, str):
             packages = [packages]

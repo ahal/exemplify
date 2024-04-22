@@ -2,11 +2,11 @@ import os
 import subprocess
 from typing import Optional
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
 @register("pip")
-class Pip(Installable):
+class Pip(Step):
     def __init__(
         self, meta: dict, packages: str | list[str], pip_path: Optional[str] = None
     ) -> None:
@@ -35,7 +35,7 @@ class Pip(Installable):
 
 
 @register("pipx")
-class PipX(Installable):
+class PipX(Step):
     def __init__(self, meta: dict, package: str, inject: Optional[str] = None) -> None:
         self.package = package
         self.inject = inject

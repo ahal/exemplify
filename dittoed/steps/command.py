@@ -4,11 +4,11 @@ import subprocess
 import tempfile
 from typing import Optional
 
-from dittoed.installables.base import Installable, register
+from dittoed.steps.base import Step, register
 
 
 @register("command")
-class Command(Installable):
+class Command(Step):
     def __init__(
         self,
         meta: dict,
