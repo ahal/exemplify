@@ -3,7 +3,7 @@ import subprocess
 
 import pytest
 
-from exemplify.steps import distro
+from exemplify.steps.packages.distro import apt
 
 
 @pytest.mark.parametrize(
@@ -38,7 +38,7 @@ from exemplify.steps import distro
     ),
 )
 def test_apt_sync(make_step, mocker, kwargs, expected):
-    m = mocker.patch.object(distro.subprocess, "check_call")
+    m = mocker.patch.object(apt.subprocess, "check_call")
 
     ins = make_step(**kwargs)
     if inspect.isclass(expected) and issubclass(expected, Exception):

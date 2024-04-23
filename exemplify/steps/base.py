@@ -2,7 +2,7 @@ import os
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from exemplify.util.python_path import import_sibling_modules
+from exemplify.util.python_path import import_modules
 
 
 registry = {}
@@ -26,4 +26,4 @@ class Step(ABC):
 
 
 # Trigger step registration.
-import_sibling_modules(exceptions=os.path.basename(__file__))
+import_modules(exceptions=os.path.basename(__file__))

@@ -3,7 +3,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from exemplify.steps.base import Step, register
+from exemplify.steps.base import Step
 
 
 class VCS(Step, ABC):
@@ -45,29 +45,3 @@ class VCS(Step, ABC):
 
     def __str__(self):
         return "PULL {} to {}".format(self.repo, self.path)
-
-
-@register("hg")
-class Mercurial(VCS):
-    @property
-    def install_command(self):
-        return ["hg", "clone"]
-
-    @property
-    def update_command(self):
-        return ["hg", "pull", "--update"]
-
-
-@register("git")
-class Git(VCS):
-    def __init__(self, *args, **kwargs) -> None:
-        self.branch = kwargs.pop("branch", "main")
-        super().__init__(*args, **kwargs)
-
-    @property
-    def install_command(self):
-        return ["git", "clone"]
-
-    @property
-    def update_command(self):
-        return ["git", "pull", "origin", self.branch]
