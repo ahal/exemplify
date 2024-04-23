@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from exemplify.steps.packages.distro import dnf
+from exemplify.steps.package.distro import dnf
 
 
 @pytest.mark.parametrize(

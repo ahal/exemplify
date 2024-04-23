@@ -3,7 +3,7 @@ import subprocess
 
 import pytest
 
-from exemplify.steps.packages.distro import apt
+from exemplify.steps.package.distro import apt
 
 
 @pytest.mark.parametrize(
