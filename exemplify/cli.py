@@ -6,8 +6,7 @@ from pathlib import Path
 from exemplify import generate_steps, parse_config, synchronize
 
 
-def discover_config(exemplar: str | Path):
-    exemplar = Path(exemplar)
+def discover_config(exemplar: Path):
     if exemplar.suffix == "toml":
         return exemplar
 
@@ -33,7 +32,8 @@ def run(args=sys.argv[1:]):
 
     args = parser.parse_args(args)
 
-    config_path = discover_config(args.exemplar)
+    exemplar = Path(args.exemplar).resolve()
+    config_path = discover_config(exemplar)
     config = parse_config(str(config_path))
 
     for step in generate_steps(config, routines=args.routines):
