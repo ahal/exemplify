@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from exemplify.steps import distro
+from exemplify.steps.packages.distro import dnf
 
 
 @pytest.mark.parametrize(
@@ -28,7 +28,7 @@ from exemplify.steps import distro
     ),
 )
 def test_dnf_sync(make_step, mocker, kwargs, expected):
-    m = mocker.patch.object(distro.subprocess, "check_call")
+    m = mocker.patch.object(dnf.subprocess, "check_call")
 
     ins = make_step(**kwargs)
     if inspect.isclass(expected) and issubclass(expected, Exception):
