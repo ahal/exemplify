@@ -24,20 +24,17 @@ class PipX(Step):
         except subprocess.CalledProcessError:
             return False
 
-    def sync(self) -> None:
+    def sync(self) -> int:
         if self.exists():
             if self.inject:
-                run(
+                return run(
                     [self.pipx, "upgrade", "--include-injected", self.inject],
-                    check=True,
-                )
-            else:
-                run([self.pipx, "upgrade", self.package], check=True)
-        else:
-            if self.inject:
-                run([self.pipx, "inject", self.inject, self.package], check=True)
-            else:
-                run([self.pipx, "install", self.package], check=True)
+                ).returncode
+            return run([self.pipx, "upgrade", self.package]).returncode
+
+        if self.inject:
+            return run([self.pipx, "inject", self.inject, self.package]).returncode
+        return run([self.pipx, "install", self.package]).returncode
 
     def __str__(self):
         return "PIPX INSTALL {}".format(self.package)

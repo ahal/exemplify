@@ -33,11 +33,10 @@ class Npm(Step):
         except subprocess.CalledProcessError:
             return False
 
-    def sync(self) -> None:
+    def sync(self) -> int:
         if self.exists():
-            run(self.args + ["--upgrade"] + self.packages)
-        else:
-            run(self.args + self.packages)
+            return run(self.args + ["--upgrade"] + self.packages).returncode
+        return run(self.args + self.packages).returncode
 
     def __str__(self):
         return "NPM INSTALL {}".format(" ".join(self.packages))

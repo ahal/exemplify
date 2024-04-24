@@ -20,11 +20,10 @@ class Dnf(Step):
         except subprocess.CalledProcessError:
             return False
 
-    def sync(self) -> None:
+    def sync(self) -> int:
         if self.exists():
-            run(["sudo", "dnf", "upgrade", "-y"] + self.packages)
-        else:
-            run(["sudo", "dnf", "install", "-y"] + self.packages)
+            return run(["sudo", "dnf", "upgrade", "-y"] + self.packages).returncode
+        return run(["sudo", "dnf", "install", "-y"] + self.packages).returncode
 
     def enabled(self) -> bool:
         return bool(which("dnf"))

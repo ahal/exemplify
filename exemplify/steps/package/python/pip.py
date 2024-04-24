@@ -17,8 +17,9 @@ class Pip(Step):
         pip_path = pip_path or "~/.pyenv/shims/pip"
         self.pip = os.path.expanduser(pip_path)
 
-    def sync(self) -> None:
-        run([self.pip, "install", "--upgrade"] + self.packages)
+    def sync(self) -> int:
+        proc = run([self.pip, "install", "--upgrade"] + self.packages)
+        return proc.returncode
 
     def __str__(self):
         return f"PIP INSTALL {', '.join(self.packages)}"

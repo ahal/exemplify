@@ -28,10 +28,9 @@ class VCS(Step, ABC):
     def exists(self) -> bool:
         return os.path.isdir(self.path)
 
-    def sync(self) -> None:
+    def sync(self) -> int:
         if self.exists():
-            run(self.update_command, cwd=self.path)
-            return
+            return run(self.update_command, cwd=self.path).returncode
 
         if not os.path.isdir(self.dest):
             os.makedirs(self.dest)
@@ -41,7 +40,7 @@ class VCS(Step, ABC):
         if self.name:
             cmd.append(self.name)
 
-        run(cmd, cwd=self.dest)
+        return run(cmd, cwd=self.dest).returncode
 
     def __str__(self):
         return "PULL {} to {}".format(self.repo, self.path)

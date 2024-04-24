@@ -10,8 +10,9 @@ class Cargo(Step):
         self.packages = packages
         self.cargo = "cargo"
 
-    def sync(self) -> None:
-        run([self.cargo, "install"] + self.packages)
+    def sync(self) -> int:
+        proc = run([self.cargo, "install"] + self.packages)
+        return proc.returncode
 
     def __str__(self):
         return f"CARGO INSTALL {', '.join(self.packages)}"

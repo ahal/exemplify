@@ -18,7 +18,7 @@ def register(name: str) -> Callable:
 
 class Step(ABC):
     @abstractmethod
-    def sync(self) -> None:
+    def sync(self) -> int:
         pass
 
     def enabled(self) -> bool:

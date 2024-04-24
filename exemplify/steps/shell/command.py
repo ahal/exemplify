@@ -1,5 +1,4 @@
 import os
-import subprocess
 import tempfile
 from typing import Optional
 
@@ -29,28 +28,22 @@ class Command(Step):
         if not os.path.isdir(self.cwd):
             os.makedirs(self.cwd)
 
-    def run(self, cmd: str) -> None:
-        console.print(f"+ {cmd.strip()}")
-        proc = run(cmd, capture_output=True, check=True, shell=True, text=True)
-        if proc.stdout:
-            console.print(proc.stdout)
-
     def exists(self) -> bool:
         if not self.checkcmd:
             return False
 
-        try:
-            self.run(self.checkcmd)
-            return True
-        except subprocess.CalledProcessError:
-            return False
+        return run(self.checkcmd, shell=True).returncode == 0
 
-    def sync(self) -> None:
+    def sync(self) -> int:
         if self.exists():
-            return
+            return 0
 
+        returncode = 0
         for cmd in self.runcmds:
-            self.run(cmd)
+            console.print(f"+ {cmd.strip()}")
+            returncode |= run(cmd, shell=True).returncode
+
+        return returncode
 
     def __str__(self):
         return f"RUN {' && '.join(self.runcmds)} in {self.cwd}"

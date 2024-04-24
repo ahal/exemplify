@@ -30,14 +30,14 @@ class Link(Step):
             self.dest, self.name = os.path.split(dest)
         self.path = os.path.join(self.dest, self.name)
 
-    def sync(self) -> None:
+    def sync(self) -> int:
         if os.path.lexists(self.path):
             os.remove(self.path)
 
         if not os.path.isdir(self.dest):
             os.makedirs(self.dest)
 
-        run(["ln", "-s", self.source, self.name], check=True, cwd=self.dest)
+        return run(["ln", "-s", self.source, self.name], cwd=self.dest).returncode
 
     def __str__(self):
         return "LINK {} to {}".format(self.source, self.path)
