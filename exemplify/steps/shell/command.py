@@ -84,6 +84,9 @@ class Command(Step):
             return False
 
     def sync(self) -> None:
+        if self.exists():
+            return
+
         for cmd in self.runcmds:
             self.run(cmd)
 
