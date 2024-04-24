@@ -1,5 +1,4 @@
 import os
-import shlex
 import subprocess
 import tempfile
 from typing import Optional
@@ -12,10 +11,9 @@ class Command(Step):
     def __init__(
         self,
         meta: dict,
-        run,
+        run: list | str,
         check: Optional[str] = None,
         cwd: Optional[str] = None,
-        shell: bool = False,
     ) -> None:
         self.runcmds = run
 
@@ -23,55 +21,15 @@ class Command(Step):
             self.runcmds = [self.runcmds]
 
         self.checkcmd = check
-        self.shell = shell
 
         cwd = cwd or tempfile.mkdtemp()
         self.cwd = os.path.expanduser(cwd)
         if not os.path.isdir(self.cwd):
             os.makedirs(self.cwd)
 
-    def run(self, command: str) -> None:
-        for cmd in command.split("&&"):
-            print(f"+ {cmd.strip()}")
-            if "|" not in cmd:
-                if not self.shell:
-                    cmd = shlex.split(cmd)
-                    cmd[0] = os.path.expanduser(cmd[0])
-                subprocess.check_call(cmd, cwd=self.cwd, shell=self.shell)
-                continue
-
-            proc = None
-            for i, subcmd in enumerate(cmd.split("|")):
-                if not self.shell:
-                    subcmd = shlex.split(subcmd)
-                    subcmd[0] = os.path.expanduser(subcmd[0])
-
-                if i == 0:
-                    proc = subprocess.Popen(
-                        subcmd,
-                        stdout=subprocess.PIPE,
-                        cwd=self.cwd,
-                        shell=self.shell,
-                        text=True,
-                    )
-                else:
-                    assert proc
-                    proc = subprocess.Popen(
-                        subcmd,
-                        stdout=subprocess.PIPE,
-                        stdin=proc.stdout,
-                        cwd=self.cwd,
-                        shell=self.shell,
-                        text=True,
-                    )
-
-            assert proc
-            output = proc.communicate()[0]
-            print(output)
-            if proc.returncode:
-                raise subprocess.CalledProcessError(
-                    returncode=proc.returncode, cmd=cmd, output=output
-                )
+    def run(self, cmd: str) -> None:
+        print(f"+ {cmd.strip()}")
+        subprocess.run(cmd, check=True, shell=True)
 
     def exists(self) -> bool:
         if not self.checkcmd:

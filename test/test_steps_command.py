@@ -34,8 +34,7 @@ import pytest
             {"run": "true && echo test"},
             dedent(
                 """
-                + true
-                + echo test
+                + true && echo test
                 test
                 """
             ).lstrip(),
@@ -52,7 +51,6 @@ import pytest
                 """
                 + echo hello | cut -d'e' -f1
                 h
-
                 """
             ).lstrip(),
             id="pipe",
