@@ -3,6 +3,7 @@ import subprocess
 from typing import Optional
 
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register("pipx")
@@ -14,8 +15,10 @@ class PipX(Step):
 
     def exists(self) -> bool:
         try:
-            output = subprocess.check_output(
-                [self.pipx, "list", "--include-injected"], text=True
+            output = run(
+                [self.pipx, "list", "--include-injected"],
+                capture_output=True,
+                text=True,
             )
             return self.package in output
         except subprocess.CalledProcessError:
@@ -24,16 +27,17 @@ class PipX(Step):
     def sync(self) -> None:
         if self.exists():
             if self.inject:
-                subprocess.check_call(
-                    [self.pipx, "upgrade", "--include-injected", self.inject]
+                run(
+                    [self.pipx, "upgrade", "--include-injected", self.inject],
+                    check=True,
                 )
             else:
-                subprocess.check_call([self.pipx, "upgrade", self.package])
+                run([self.pipx, "upgrade", self.package], check=True)
         else:
             if self.inject:
-                subprocess.check_call([self.pipx, "inject", self.inject, self.package])
+                run([self.pipx, "inject", self.inject, self.package], check=True)
             else:
-                subprocess.check_call([self.pipx, "install", self.package])
+                run([self.pipx, "install", self.package], check=True)
 
     def __str__(self):
         return "PIPX INSTALL {}".format(self.package)

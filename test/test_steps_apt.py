@@ -38,7 +38,7 @@ from exemplify.steps.package.distro import apt
     ),
 )
 def test_apt_sync(make_step, mocker, kwargs, expected):
-    m = mocker.patch.object(apt.subprocess, "check_call")
+    m = mocker.patch.object(apt, "run")
 
     ins = make_step(**kwargs)
     if inspect.isclass(expected) and issubclass(expected, Exception):

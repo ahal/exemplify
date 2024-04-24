@@ -1,8 +1,8 @@
 import os
-import subprocess
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from exemplify.util.process import run
 from exemplify.steps.base import Step
 
 
@@ -30,7 +30,7 @@ class VCS(Step, ABC):
 
     def sync(self) -> None:
         if self.exists():
-            subprocess.check_call(self.update_command, cwd=self.path)
+            run(self.update_command, cwd=self.path)
             return
 
         if not os.path.isdir(self.dest):
@@ -41,7 +41,7 @@ class VCS(Step, ABC):
         if self.name:
             cmd.append(self.name)
 
-        subprocess.check_call(cmd, cwd=self.dest)
+        run(cmd, cwd=self.dest)
 
     def __str__(self):
         return "PULL {} to {}".format(self.repo, self.path)

@@ -1,6 +1,5 @@
-import subprocess
-
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register("cargo")
@@ -12,7 +11,7 @@ class Cargo(Step):
         self.cargo = "cargo"
 
     def sync(self) -> None:
-        subprocess.check_call([self.cargo, "install"] + self.packages)
+        run([self.cargo, "install"] + self.packages)
 
     def __str__(self):
         return f"CARGO INSTALL {', '.join(self.packages)}"

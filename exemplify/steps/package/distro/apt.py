@@ -2,6 +2,7 @@ import subprocess
 from shutil import which
 
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register("apt")
@@ -14,7 +15,7 @@ class Apt(Step):
     def exists(self) -> bool:
         try:
             for package in self.packages:
-                subprocess.check_call(
+                run(
                     ["dpkg", "-s", package],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
@@ -25,9 +26,9 @@ class Apt(Step):
 
     def sync(self) -> None:
         if self.exists():
-            subprocess.check_call(["sudo", "apt", "upgrade", "-y"] + self.packages)
+            run(["sudo", "apt", "upgrade", "-y"] + self.packages)
         else:
-            subprocess.check_call(["sudo", "apt", "install", "-y"] + self.packages)
+            run(["sudo", "apt", "install", "-y"] + self.packages)
 
     def enabled(self) -> bool:
         return bool(which("apt"))

@@ -28,7 +28,7 @@ from exemplify.steps.package.distro import dnf
     ),
 )
 def test_dnf_sync(make_step, mocker, kwargs, expected):
-    m = mocker.patch.object(dnf.subprocess, "check_call")
+    m = mocker.patch.object(dnf, "run")
 
     ins = make_step(**kwargs)
     if inspect.isclass(expected) and issubclass(expected, Exception):

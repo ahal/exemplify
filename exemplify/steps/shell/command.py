@@ -3,6 +3,8 @@ import subprocess
 import tempfile
 from typing import Optional
 
+from exemplify.util.process import run
+from exemplify.console import console
 from exemplify.steps.base import Step, register
 
 
@@ -28,8 +30,10 @@ class Command(Step):
             os.makedirs(self.cwd)
 
     def run(self, cmd: str) -> None:
-        print(f"+ {cmd.strip()}")
-        subprocess.run(cmd, check=True, shell=True)
+        console.print(f"+ {cmd.strip()}")
+        proc = run(cmd, capture_output=True, check=True, shell=True, text=True)
+        if proc.stdout:
+            console.print(proc.stdout)
 
     def exists(self) -> bool:
         if not self.checkcmd:

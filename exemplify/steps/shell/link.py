@@ -1,7 +1,7 @@
 import os
-import subprocess
 from typing import Optional
 
+from exemplify.util.process import run
 from exemplify.steps.base import Step, register
 
 
@@ -37,7 +37,7 @@ class Link(Step):
         if not os.path.isdir(self.dest):
             os.makedirs(self.dest)
 
-        subprocess.check_call(["ln", "-s", self.source, self.name], cwd=self.dest)
+        run(["ln", "-s", self.source, self.name], check=True, cwd=self.dest)
 
     def __str__(self):
         return "LINK {} to {}".format(self.source, self.path)

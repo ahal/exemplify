@@ -2,6 +2,7 @@ import subprocess
 from shutil import which
 
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register("dnf")
@@ -14,16 +15,16 @@ class Dnf(Step):
     def exists(self) -> bool:
         try:
             for package in self.packages:
-                subprocess.check_call(["dnf", "list", "--installed", package])
+                run(["dnf", "list", "--installed", package])
             return True
         except subprocess.CalledProcessError:
             return False
 
     def sync(self) -> None:
         if self.exists():
-            subprocess.check_call(["sudo", "dnf", "upgrade", "-y"] + self.packages)
+            run(["sudo", "dnf", "upgrade", "-y"] + self.packages)
         else:
-            subprocess.check_call(["sudo", "dnf", "install", "-y"] + self.packages)
+            run(["sudo", "dnf", "install", "-y"] + self.packages)
 
     def enabled(self) -> bool:
         return bool(which("dnf"))

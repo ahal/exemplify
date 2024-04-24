@@ -3,6 +3,7 @@ from typing import Optional
 
 import tomli
 
+from exemplify.console import console
 from exemplify.steps.base import Step, registry
 from exemplify.util.merge import merge
 
@@ -10,9 +11,7 @@ from exemplify.util.merge import merge
 def synchronize(item: Step) -> None:
     if not item.enabled():
         return
-    print("####")
-    print(item)
-    print("####")
+    console.print(item)
     item.sync()
 
 
@@ -35,18 +34,16 @@ def generate_steps(config: dict, routines: Optional[list[str]] = None):
     g_meta = config.pop("meta", {})
     routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
-        pmsg = f"\nPROCESSING routine {name}"
-        print(pmsg)
-        print("-" * len(pmsg))
-        meta = config[name].pop("meta", None)
-        steps = config[name]["step"]
-        for step in steps:
-            i_type = step.pop("type")
+        with console.status(f"processing {name}"):
+            meta = config[name].pop("meta", None)
+            steps = config[name]["step"]
+            for step in steps:
+                i_type = step.pop("type")
 
-            # Interpolate meta data into step values.
-            if meta:
-                for key, val in step.items():
-                    step[key] = val.format(**meta)
+                # Interpolate meta data into step values.
+                if meta:
+                    for key, val in step.items():
+                        step[key] = val.format(**meta)
 
-            step = registry[i_type](g_meta, **step)
-            yield step
+                step = registry[i_type](g_meta, **step)
+                yield step

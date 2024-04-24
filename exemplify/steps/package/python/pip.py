@@ -1,8 +1,8 @@
 import os
-import subprocess
 from typing import Optional
 
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register("pip")
@@ -18,7 +18,7 @@ class Pip(Step):
         self.pip = os.path.expanduser(pip_path)
 
     def sync(self) -> None:
-        subprocess.check_call([self.pip, "install", "--upgrade"] + self.packages)
+        run([self.pip, "install", "--upgrade"] + self.packages)
 
     def __str__(self):
         return f"PIP INSTALL {', '.join(self.packages)}"

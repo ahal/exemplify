@@ -3,6 +3,7 @@ import subprocess
 from typing import Optional
 
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register("npm")
@@ -27,16 +28,16 @@ class Npm(Step):
 
     def exists(self) -> bool:
         try:
-            subprocess.check_output([self.npm, "show"] + self.packages)
+            run([self.npm, "show"] + self.packages)
             return True
         except subprocess.CalledProcessError:
             return False
 
     def sync(self) -> None:
         if self.exists():
-            subprocess.check_call(self.args + ["--upgrade"] + self.packages)
+            run(self.args + ["--upgrade"] + self.packages)
         else:
-            subprocess.check_call(self.args + self.packages)
+            run(self.args + self.packages)
 
     def __str__(self):
         return "NPM INSTALL {}".format(" ".join(self.packages))
