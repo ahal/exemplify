@@ -11,8 +11,14 @@ from exemplify.util.merge import merge
 def synchronize(item: Step) -> None:
     if not item.enabled():
         return
+
     console.print(item)
-    item.sync()
+    with console.capture() as capture:
+        ret = item.sync()
+
+    if ret != 0:
+        print("FOOBAR")
+        console.print(capture.get())
 
 
 def parse_config(path: str) -> dict:
