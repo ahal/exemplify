@@ -7,7 +7,7 @@ from exemplify import generate_steps, parse_config, synchronize
 
 
 def discover_config(exemplar: Path):
-    if exemplar.suffix == "toml":
+    if exemplar.suffix == ".toml":
         return exemplar
 
     path = Path(exemplar) / "exemplify.toml"
