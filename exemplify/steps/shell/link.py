@@ -5,8 +5,10 @@ from exemplify.util.process import run
 from exemplify.steps.base import Step, register
 
 
-@register("link")
+@register()
 class Link(Step):
+    name = "link"
+
     def __init__(
         self,
         meta: dict,
@@ -30,6 +32,10 @@ class Link(Step):
             self.dest, self.name = os.path.split(dest)
         self.path = os.path.join(self.dest, self.name)
 
+    @property
+    def directive(self) -> str:
+        return "{} to {}".format(self.source, self.path)
+
     def sync(self) -> int:
         if os.path.lexists(self.path):
             os.remove(self.path)
@@ -38,6 +44,3 @@ class Link(Step):
             os.makedirs(self.dest)
 
         return run(["ln", "-s", self.source, self.name], cwd=self.dest).returncode
-
-    def __str__(self):
-        return "LINK {} to {}".format(self.source, self.path)

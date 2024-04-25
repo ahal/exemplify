@@ -7,8 +7,10 @@ from exemplify.console import console
 from exemplify.steps.base import Step, register
 
 
-@register("command")
+@register()
 class Command(Step):
+    name = "command"
+
     def __init__(
         self,
         meta: dict,
@@ -28,6 +30,10 @@ class Command(Step):
         if not os.path.isdir(self.cwd):
             os.makedirs(self.cwd)
 
+    @property
+    def directive(self) -> str:
+        return f"{' && '.join(self.runcmds)} in {self.cwd}"
+
     def exists(self) -> bool:
         if not self.checkcmd:
             return False
@@ -44,6 +50,3 @@ class Command(Step):
             returncode |= run(cmd, shell=True).returncode
 
         return returncode
-
-    def __str__(self):
-        return f"RUN {' && '.join(self.runcmds)} in {self.cwd}"

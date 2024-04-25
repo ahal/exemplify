@@ -5,12 +5,18 @@ from exemplify.steps.base import Step, register
 from exemplify.util.process import run
 
 
-@register("apt")
+@register()
 class Apt(Step):
+    name = "apt"
+
     def __init__(self, meta: dict, packages: str | list[str]):
         if isinstance(packages, str):
             packages = [packages]
         self.packages = packages
+
+    @property
+    def directive(self) -> str:
+        return f"install {' '.join(self.packages)}"
 
     def exists(self) -> bool:
         try:
@@ -31,6 +37,3 @@ class Apt(Step):
 
     def enabled(self) -> bool:
         return bool(which("apt"))
-
-    def __str__(self):
-        return "APT INSTALL {}".format(" ".join(self.packages))

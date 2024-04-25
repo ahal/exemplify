@@ -6,12 +6,18 @@ from exemplify.steps.base import Step, register
 from exemplify.util.process import run
 
 
-@register("pipx")
+@register()
 class PipX(Step):
+    name = "pipx"
+
     def __init__(self, meta: dict, package: str, inject: Optional[str] = None) -> None:
         self.package = package
         self.inject = inject
         self.pipx = os.path.expanduser("~/.pyenv/shims/pipx")
+
+    @property
+    def directive(self) -> str:
+        return f"install {self.package}"
 
     def exists(self) -> bool:
         try:
@@ -35,6 +41,3 @@ class PipX(Step):
         if self.inject:
             return run([self.pipx, "inject", self.inject, self.package]).returncode
         return run([self.pipx, "install", self.package]).returncode
-
-    def __str__(self):
-        return "PIPX INSTALL {}".format(self.package)

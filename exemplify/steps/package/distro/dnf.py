@@ -5,12 +5,18 @@ from exemplify.steps.base import Step, register
 from exemplify.util.process import run
 
 
-@register("dnf")
+@register()
 class Dnf(Step):
+    name = "dnf"
+
     def __init__(self, meta: dict, packages: str | list[str]) -> None:
         if isinstance(packages, str):
             packages = [packages]
         self.packages = packages
+
+    @property
+    def directive(self) -> str:
+        return f"install {' '.join(self.packages)}"
 
     def exists(self) -> bool:
         try:
@@ -27,6 +33,3 @@ class Dnf(Step):
 
     def enabled(self) -> bool:
         return bool(which("dnf"))
-
-    def __str__(self):
-        return "DNF INSTALL {}".format(" ".join(self.packages))

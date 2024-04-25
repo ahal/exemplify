@@ -6,8 +6,10 @@ from exemplify.steps.base import Step, register
 from exemplify.util.process import run
 
 
-@register("npm")
+@register()
 class Npm(Step):
+    name = "npm"
+
     def __init__(
         self,
         meta: dict,
@@ -26,6 +28,10 @@ class Npm(Step):
         if global_:
             self.args.append("-g")
 
+    @property
+    def directive(self) -> str:
+        return f"install {' '.join(self.packages)}"
+
     def exists(self) -> bool:
         try:
             run([self.npm, "show"] + self.packages)
@@ -37,6 +43,3 @@ class Npm(Step):
         if self.exists():
             return run(self.args + ["--upgrade"] + self.packages).returncode
         return run(self.args + self.packages).returncode
-
-    def __str__(self):
-        return "NPM INSTALL {}".format(" ".join(self.packages))

@@ -28,6 +28,11 @@ class VCS(Step, ABC):
     def exists(self) -> bool:
         return os.path.isdir(self.path)
 
+    @property
+    def directive(self):
+        verb = "pull" if self.exists() else "clone"
+        return f"{verb} {self.repo} to {self.path}"
+
     def sync(self) -> int:
         if self.exists():
             return run(self.update_command, cwd=self.path).returncode
@@ -41,6 +46,3 @@ class VCS(Step, ABC):
             cmd.append(self.name)
 
         return run(cmd, cwd=self.dest).returncode
-
-    def __str__(self):
-        return "PULL {} to {}".format(self.repo, self.path)

@@ -18,7 +18,7 @@ def synchronize(item: Step) -> None:
 
     if ret != 0:
         print("FOOBAR")
-        console.print(capture.get())
+        print(capture.get())
 
 
 def parse_config(path: str) -> dict:

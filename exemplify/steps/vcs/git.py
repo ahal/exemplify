@@ -2,8 +2,10 @@ from exemplify.steps.base import register
 from exemplify.steps.vcs.base import VCS
 
 
-@register("git")
+@register()
 class Git(VCS):
+    name = "git"
+
     def __init__(self, *args, **kwargs) -> None:
         self.branch = kwargs.pop("branch", "main")
         super().__init__(*args, **kwargs)

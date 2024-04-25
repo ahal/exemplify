@@ -5,8 +5,10 @@ from exemplify.steps.base import Step, register
 from exemplify.util.process import run
 
 
-@register("pip")
+@register()
 class Pip(Step):
+    name = "pip"
+
     def __init__(
         self, meta: dict, packages: str | list[str], pip_path: Optional[str] = None
     ) -> None:
@@ -17,9 +19,10 @@ class Pip(Step):
         pip_path = pip_path or "~/.pyenv/shims/pip"
         self.pip = os.path.expanduser(pip_path)
 
+    @property
+    def directive(self) -> str:
+        return f"install {' '.join(self.packages)}"
+
     def sync(self) -> int:
         proc = run([self.pip, "install", "--upgrade"] + self.packages)
         return proc.returncode
-
-    def __str__(self):
-        return f"PIP INSTALL {', '.join(self.packages)}"
