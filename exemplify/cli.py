@@ -3,6 +3,7 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
+from exemplify.console import console
 from exemplify import generate_steps, parse_config, synchronize
 
 
@@ -36,5 +37,17 @@ def run(args=sys.argv[1:]):
     config_path = discover_config(exemplar)
     config = parse_config(str(config_path))
 
-    for step in generate_steps(config, routines=args.routines):
-        synchronize(step)
+    routines = args.routines or config["meta"].get("defaults")
+    if not routines:
+        routines = [k for k in config.keys() if k != "meta"]
+
+    for routine in routines:
+        for step in generate_steps(routine, config):
+            with console.status(f"Processing routine {routine}: STEP {step}"):
+                with console.capture() as capture:
+                    ret = synchronize(step)
+
+                if ret == 0:
+                    console.print(f":white_heavy_check_mark: {step}")
+                else:
+                    print(capture.get())
