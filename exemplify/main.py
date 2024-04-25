@@ -8,15 +8,16 @@ from exemplify.steps.base import Step, registry
 from exemplify.util.merge import merge
 
 
-def synchronize(item: Step) -> None:
-    if not item.enabled():
+def synchronize(step: Step) -> None:
+    if not step.enabled():
         return
 
-    console.print(item)
     with console.capture() as capture:
-        ret = item.sync()
+        ret = step.sync()
 
-    if ret != 0:
+    if ret == 0:
+        console.print(f":white_heavy_check_mark: {step}")
+    else:
         print(capture.get())
 
 
@@ -39,16 +40,19 @@ def generate_steps(config: dict, routines: Optional[list[str]] = None):
     g_meta = config.pop("meta", {})
     routines = routines or g_meta.get("defaults", config.keys())
     for name in routines:
-        with console.status(f"processing {name}"):
-            meta = config[name].pop("meta", None)
-            steps = config[name]["step"]
-            for step in steps:
-                i_type = step.pop("type")
+        meta = config[name].pop("meta", None)
+        steps = config[name]["step"]
+        for step in steps:
+            i_type = step.pop("type")
 
-                # Interpolate meta data into step values.
-                if meta:
-                    for key, val in step.items():
-                        step[key] = val.format(**meta)
+            # Interpolate meta data into step values.
+            if meta:
+                for key, val in step.items():
+                    step[key] = val.format(**meta)
 
-                step = registry[i_type](g_meta, **step)
+            step = registry[i_type](g_meta, **step)
+
+            with console.status(f"Processing routine {name}: STEP {step}"):
                 yield step
+
+        console.print(f":white_heavy_check_mark: {name} successful")
