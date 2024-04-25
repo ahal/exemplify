@@ -17,6 +17,7 @@ class Command(Step):
         run: list | str,
         check: Optional[str] = None,
         cwd: Optional[str] = None,
+        alias: Optional[str] = None,
     ) -> None:
         self.runcmds = run
 
@@ -30,9 +31,11 @@ class Command(Step):
         if not os.path.isdir(self.cwd):
             os.makedirs(self.cwd)
 
+        self.alias = alias or f"{' && '.join(self.runcmds)} in {self.cwd}"
+
     @property
     def directive(self) -> str:
-        return f"{' && '.join(self.runcmds)} in {self.cwd}"
+        return self.alias
 
     def exists(self) -> bool:
         if not self.checkcmd:

@@ -72,11 +72,31 @@ import pytest
     ),
 )
 def test_command_sync(make_step, capfd, kwargs, expected_returncode, expected_output):
-    ins = make_step(**kwargs)
+    step = make_step(**kwargs)
     if inspect.isclass(expected_output) and issubclass(expected_output, Exception):
         with pytest.raises(expected_output):
-            ins.sync()
+            step.sync()
     else:
-        assert ins.sync() == expected_returncode
+        assert step.sync() == expected_returncode
         out, err = capfd.readouterr()
         assert out == expected_output
+
+
+@pytest.mark.parametrize(
+    "kwargs,expected_directive",
+    (
+        pytest.param(
+            {"run": "echo hello", "cwd": "workdir"},
+            "echo hello in workdir",
+            id="default",
+        ),
+        pytest.param(
+            {"run": "echo hello", "alias": "printing hello"},
+            "printing hello",
+            id="alias",
+        ),
+    ),
+)
+def test_command_directive(make_step, kwargs, expected_directive):
+    step = make_step(**kwargs)
+    assert step.directive == expected_directive
