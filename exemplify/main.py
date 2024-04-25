@@ -17,7 +17,6 @@ def synchronize(item: Step) -> None:
         ret = item.sync()
 
     if ret != 0:
-        print("FOOBAR")
         print(capture.get())
 
 
