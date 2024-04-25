@@ -1,24 +1,16 @@
 import os
-from typing import Optional
 
 import tomli
 
-from exemplify.console import console
 from exemplify.steps.base import Step, registry
 from exemplify.util.merge import merge
 
 
-def synchronize(step: Step) -> None:
+def synchronize(step: Step) -> int:
     if not step.enabled():
-        return
+        return 0
 
-    with console.capture() as capture:
-        ret = step.sync()
-
-    if ret == 0:
-        console.print(f":white_heavy_check_mark: {step}")
-    else:
-        print(capture.get())
+    return step.sync()
 
 
 def parse_config(path: str) -> dict:
@@ -36,23 +28,15 @@ def parse_config(path: str) -> dict:
     return data
 
 
-def generate_steps(config: dict, routines: Optional[list[str]] = None):
-    g_meta = config.pop("meta", {})
-    routines = routines or g_meta.get("defaults", config.keys())
-    for name in routines:
-        meta = config[name].pop("meta", None)
-        steps = config[name]["step"]
-        for step in steps:
-            i_type = step.pop("type")
+def generate_steps(name: str, config: dict):
+    routine = config[name]
+    routine_meta = routine.get("meta")
+    for step in routine["step"]:
+        # Interpolate meta data into step values.
+        if routine_meta:
+            for key, val in step.items():
+                step[key] = val.format(**routine_meta)
 
-            # Interpolate meta data into step values.
-            if meta:
-                for key, val in step.items():
-                    step[key] = val.format(**meta)
-
-            step = registry[i_type](g_meta, **step)
-
-            with console.status(f"Processing routine {name}: STEP {step}"):
-                yield step
-
-        console.print(f":white_heavy_check_mark: {name} successful")
+        stepcls = registry[step.pop("type")]
+        step = stepcls(config["meta"], **step)
+        yield step
