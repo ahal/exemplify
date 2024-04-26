@@ -14,7 +14,7 @@ class Link(Step):
         meta: dict,
         source: str,
         dest: Optional[str] = None,
-        name: Optional[str] = None,
+        basename: Optional[str] = None,
     ) -> None:
         self.source = os.path.expanduser(source)
         if not os.path.isabs(self.source):
@@ -24,10 +24,10 @@ class Link(Step):
         dest = os.path.expanduser(dest)
         if os.path.isdir(dest):
             self.dest = dest
-            if not name:
-                self.name = os.path.basename(source)
+            if not basename:
+                self.basename = os.path.basename(source)
             else:
-                self.name = name
+                self.basename = basename
         else:
             self.dest, self.name = os.path.split(dest)
         self.path = os.path.join(self.dest, self.name)

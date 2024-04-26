@@ -41,9 +41,7 @@ class StepProgress(Progress):
         self.steps = []
         return super().__init__(
             TextColumn(" "),
-            HiddenSpinnerColumn(
-                "[purple]{task.description}[/purple]", spinner_name="dots"
-            ),
+            HiddenSpinnerColumn("{task.description}", spinner_name="dots"),
             **kwargs,
         )
 

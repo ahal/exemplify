@@ -30,7 +30,7 @@ class Step(ABC):
         return True
 
     def __str__(self):
-        return f"({self.name}) {self.directive}"
+        return f"[blue]{self.name.upper()}[/blue] [grey]{self.directive}[/grey]"
 
 
 # Trigger step registration.
