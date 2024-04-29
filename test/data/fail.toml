@@ -1,0 +1,14 @@
+[[foo.step]]
+type = "command"
+alias = "Saying hello"
+run = "echo Hello"
+
+[[foo.step]]
+type = "command"
+alias = "Saying world"
+run = "echo world; exit 1"
+
+[[bar.step]]
+type = "command"
+alias = "Saying goodbye"
+run = "echo Goodbye"

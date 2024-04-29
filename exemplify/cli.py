@@ -39,6 +39,9 @@ def run(args=sys.argv[1:]):
         action="append",
         help="Limit to specified routines",
     )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Enable verbose output"
+    )
 
     args = parser.parse_args(args)
 
@@ -98,13 +101,14 @@ def run(args=sys.argv[1:]):
                     ret = synchronize(step)
 
                 progress.returncode |= ret
-                if ret != 0:
+                emoji = ":white_heavy_check_mark:" if ret == 0 else ":x:"
+                description = f"{emoji}: {step}"
+                if args.verbose or ret != 0:
                     lines = capture.get().splitlines()
                     stdout = "\n".join(f"  {line}" for line in lines)
-                    description = f":x: {step}\n{stdout}"
-                    progress.step.update(description=description)
-                else:
-                    progress.step.update(description=f":white_heavy_check_mark: {step}")
+                    description = f"{description}\n{stdout}"
+
+                progress.step.update(description=description)
 
                 overall_progress.update(overall_task_id, advance=1)
 
