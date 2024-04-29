@@ -38,5 +38,5 @@ def generate_steps(name: str, config: dict):
                 step[key] = val.format(**routine_meta)
 
         stepcls = registry[step.pop("type")]
-        step = stepcls(config["meta"], **step)
+        step = stepcls(config.get("meta"), **step)
         yield step

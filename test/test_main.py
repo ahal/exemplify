@@ -1,3 +1,4 @@
+import traceback
 from pprint import pprint
 from textwrap import dedent
 
@@ -106,16 +107,17 @@ def test_generate_steps_basic(name):
     step.update(defaults(name))
     config = {"meta": {"root": "cwd"}, name: {"step": [step]}}
 
-    steps = list(main.generate_steps(config, [name]))
+    steps = list(main.generate_steps(name, config))
     assert len(steps) == 1
     assert isinstance(steps[0], main.registry[name])
 
 
-def assert_empty(steps):
+def assert_empty(e):
+    assert isinstance(e, KeyError)
+
+
+def assert_no_step(steps):
     assert steps == []
-
-
-assert_no_step = assert_empty
 
 
 def assert_interpolate(steps):
@@ -126,27 +128,31 @@ def assert_interpolate(steps):
 
 
 @pytest.mark.parametrize(
-    "config,routines",
+    "routine,config",
     (
-        pytest.param({}, [], id="empty"),
-        pytest.param({"foo": {"step": []}}, ["foo"], id="no_step"),
+        pytest.param("", {}, id="empty"),
+        pytest.param("foo", {"foo": {"step": []}}, id="no_step"),
         pytest.param(
+            "foo",
             {
                 "foo": {
                     "meta": {"value": "thing"},
                     "step": [{"type": "foo", "key": "some {value}"}],
                 },
             },
-            ["foo"],
             id="interpolate",
         ),
     ),
 )
-def test_generate_steps_custom(request, mocker, config, routines):
+def test_generate_steps_custom(request, mocker, routine, config):
     mocker.patch.dict(main.registry, {"foo": FakeStep, "bar": FakeStep})
 
-    steps = list(main.generate_steps(config, routines))
+    try:
+        result = list(main.generate_steps(routine, config))
+    except Exception as e:
+        traceback.print_exc()
+        result = e
 
     param_id = request.node.callspec.id
     assert_func = globals()[f"assert_{param_id}"]
-    assert_func(steps)
+    assert_func(result)
