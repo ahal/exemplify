@@ -1,5 +1,13 @@
+from pathlib import Path
 import pytest
 from exemplify.steps.base import Step, registry
+
+here = Path(__file__).parent
+
+
+@pytest.fixture(scope="session")
+def datadir():
+    return here / "data"
 
 
 class FakeStep(Step):

@@ -10,6 +10,7 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
+        exclude: "test/test_cli.py"
       - id: end-of-file-fixer
       - id: check-yaml
         exclude: template
