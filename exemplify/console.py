@@ -83,7 +83,7 @@ class RoutineProgress(Progress):
             TextColumn("{task.description}"), HiddenTimeElapsedColumn(), **kwargs
         )
 
-        self._id = self.add_task(f"Routine {self.routine}", start=False)
+        self._id = self.add_task(f"[bold]Routine {self.routine}", start=False)
 
     def update(self, *args, **kwargs):
         return super().update(self._id, *args, **kwargs)
