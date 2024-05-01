@@ -2,15 +2,8 @@ import os
 
 import tomli
 
-from exemplify.steps.base import Step, registry
+from exemplify.steps.base import registry
 from exemplify.util.merge import merge
-
-
-def synchronize(step: Step) -> int:
-    if not step.enabled():
-        return 0
-
-    return step.sync()
 
 
 def parse_config(path: str) -> dict:

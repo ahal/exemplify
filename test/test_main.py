@@ -9,21 +9,6 @@ from exemplify import main
 from conftest import FakeStep
 
 
-def test_synchronize(mocker):
-    ins = FakeStep({}, "key")
-    m_sync = mocker.patch.object(ins, "sync")
-    m_enabled = mocker.patch.object(ins, "enabled")
-    m_enabled.return_value = False
-
-    main.synchronize(ins)
-    m_enabled.assert_called_once_with()
-    m_sync.assert_not_called()
-
-    m_enabled.return_value = True
-    main.synchronize(ins)
-    m_sync.assert_called_once_with()
-
-
 @pytest.mark.parametrize(
     "config, expected",
     (

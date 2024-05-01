@@ -1,10 +1,10 @@
 import os
+import subprocess
 import tempfile
-from typing import Optional
+from typing import Generator, Optional
 
-from exemplify.util.process import run
-from exemplify.console import console
 from exemplify.steps.base import Step, register
+from exemplify.util.process import run
 
 
 @register()
@@ -43,13 +43,26 @@ class Command(Step):
 
         return run(self.checkcmd, shell=True).returncode == 0
 
-    def sync(self) -> int:
+    def sync(self) -> Generator[str, str, int]:
         if self.exists():
             return 0
 
         returncode = 0
         for cmd in self.runcmds:
-            console.print(f"+ {cmd.strip()}")
-            returncode |= run(cmd, shell=True).returncode
+            yield f"+ {cmd.strip()}"
+            proc = subprocess.Popen(
+                cmd,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
+
+            assert proc.stdout
+            for line in proc.stdout:
+                yield line
+
+            proc.wait()
+            returncode |= proc.returncode
 
         return returncode

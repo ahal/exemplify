@@ -1,3 +1,4 @@
+import inspect
 import os
 import sys
 from argparse import ArgumentParser
@@ -13,7 +14,7 @@ from rich.progress import (
 )
 
 from exemplify.console import RoutineProgress, console
-from exemplify import generate_steps, parse_config, synchronize
+from exemplify import generate_steps, parse_config
 
 
 def discover_config(exemplar: Path):
@@ -56,7 +57,7 @@ def run(args=sys.argv[1:]):
     routine_progress = []
     num_steps = 0
     for name in routines:
-        routine_progress.append(RoutineProgress(name))
+        routine_progress.append(RoutineProgress(name, display_output=args.verbose))
 
         for step in generate_steps(name, config):
             num_steps += 1
@@ -98,17 +99,25 @@ def run(args=sys.argv[1:]):
                     break
 
                 with console.capture() as capture:
-                    ret = synchronize(step)
+                    if not step.enabled():
+                        ret = 0
+                    elif inspect.isgeneratorfunction(step.sync):
+                        sync = step.sync()
+                        try:
+                            while True:
+                                output = next(sync)
+                                progress.step.append_output(output.strip())
+                        except StopIteration as e:
+                            ret = e.value
+                    else:
+                        ret = step.sync()
 
-                progress.returncode |= ret
-                emoji = ":white_heavy_check_mark:" if ret == 0 else ":x:"
-                description = f"{emoji}: {step}"
-                if args.verbose or ret != 0:
-                    lines = capture.get().splitlines()
-                    stdout = "\n".join(f"  {line}" for line in lines)
-                    description = f"{description}\n{stdout}"
+                captured_output = capture.get()
+                if captured_output:
+                    out = f"Captured output:\n{captured_output}"
+                    progress.step.append_output(out)
 
-                progress.step.update(description=description)
+                progress.step.set_status(ret)
 
                 overall_progress.update(overall_task_id, advance=1)
 

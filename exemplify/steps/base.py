@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Callable, Generator
 
 from exemplify.util.python_path import import_modules
 
@@ -24,7 +24,7 @@ class Step(ABC):
     def directive(self) -> str: ...
 
     @abstractmethod
-    def sync(self) -> int: ...
+    def sync(self) -> int | Generator[str, str, int]: ...
 
     def enabled(self) -> bool:
         return True

@@ -14,7 +14,6 @@ import pytest
                 """
                 + echo hello
                 hello
-
                 """
             ).lstrip(),
             id="string",
@@ -29,7 +28,6 @@ import pytest
 
                 + echo goodbye
                 goodbye
-
                 """
             ).lstrip(),
             id="list",
@@ -41,7 +39,6 @@ import pytest
                 """
                 + true && echo test
                 test
-
                 """
             ).lstrip(),
             id="success && success",
@@ -51,9 +48,7 @@ import pytest
             1,
             dedent(
                 """
-                + false && echo test
-
-                """
+                + false && echo test"""
             ).lstrip(),
             id="fail && success",
         ),
@@ -64,22 +59,29 @@ import pytest
                 """
                 + echo hello | cut -d'e' -f1
                 h
-
                 """
             ).lstrip(),
             id="pipe",
         ),
     ),
 )
-def test_command_sync(make_step, capfd, kwargs, expected_returncode, expected_output):
+def test_command_sync(make_step, kwargs, expected_returncode, expected_output):
     step = make_step(**kwargs)
     if inspect.isclass(expected_output) and issubclass(expected_output, Exception):
         with pytest.raises(expected_output):
-            step.sync()
+            list(step.sync())
     else:
-        assert step.sync() == expected_returncode
-        out, err = capfd.readouterr()
-        assert out == expected_output
+        out = []
+        ret = None
+        sync = step.sync()
+        try:
+            while True:
+                out.append(next(sync))
+        except StopIteration as e:
+            ret = e.value
+
+        assert ret == expected_returncode
+        assert "\n".join(out) == expected_output
 
 
 @pytest.mark.parametrize(
