@@ -137,6 +137,15 @@ class RoutineProgress(Progress):
     def start_routine(self) -> None:
         self.step.start()
         self.start_task(self._id)
+        self.update(
+            description=f"[bold]Routine [blue]{self.routine}[/blue] processing.."
+        )
 
     def stop_routine(self) -> None:
         self.stop_task(self._id)
+
+        if self.returncode == 0:
+            description = f"[bold green]Routine [blue]{self.routine}[/blue] succeeded!"
+        else:
+            description = f"[bold red]Routine [blue]{self.routine}[/blue] failed!"
+        self.update(description=description)

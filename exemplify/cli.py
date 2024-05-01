@@ -88,9 +88,6 @@ def run(args=sys.argv[1:]):
             overall_progress.update(overall_task_id, description=top_description)
 
             progress.start_routine()
-            progress.update(
-                description=f"[bold]Routine [blue]{progress.routine}[/blue] processing.."
-            )
 
             while True:
                 try:
@@ -122,13 +119,5 @@ def run(args=sys.argv[1:]):
                 overall_progress.update(overall_task_id, advance=1)
 
             progress.stop_routine()
-            if progress.returncode == 0:
-                progress.update(
-                    description=f"[bold green]Routine [blue]{progress.routine}[/blue] succeeded!",
-                )
-            else:
-                progress.update(
-                    description=f"[bold red]Routine [blue]{progress.routine}[/blue] failed!",
-                )
 
         overall_progress.update(overall_task_id, visible=False)
