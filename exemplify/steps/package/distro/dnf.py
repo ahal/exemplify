@@ -10,6 +10,8 @@ class Dnf(Step):
     name = "dnf"
 
     def __init__(self, meta: dict, packages: str | list[str]) -> None:
+        super().__init__(meta)
+
         if isinstance(packages, str):
             packages = [packages]
         self.packages = packages

@@ -11,6 +11,8 @@ class PipX(Step):
     name = "pipx"
 
     def __init__(self, meta: dict, package: str, inject: Optional[str] = None) -> None:
+        super().__init__(meta)
+
         self.package = package
         self.inject = inject
         self.pipx = os.path.expanduser("~/.pyenv/shims/pipx")

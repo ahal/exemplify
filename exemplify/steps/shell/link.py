@@ -16,9 +16,11 @@ class Link(Step):
         dest: Optional[str] = None,
         basename: Optional[str] = None,
     ) -> None:
+        super().__init__(meta)
+
         self.source = os.path.expanduser(source)
         if not os.path.isabs(self.source):
-            self.source = os.path.join(meta["root"], source)
+            self.source = os.path.join(self.meta["root"], source)
 
         dest = dest or "~"
         dest = os.path.expanduser(dest)

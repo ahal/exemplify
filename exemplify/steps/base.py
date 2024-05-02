@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from typing import Callable, Generator
+from typing import Any, Callable, Generator
 
 from exemplify.util.python_path import import_modules
 
@@ -18,6 +18,9 @@ def register() -> Callable:
 
 class Step(ABC):
     name: str = ""
+
+    def __init__(self, meta: dict[str, Any]) -> None:
+        self.meta = meta
 
     @property
     @abstractmethod

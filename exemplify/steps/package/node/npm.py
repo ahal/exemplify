@@ -17,6 +17,8 @@ class Npm(Step):
         global_: bool = True,
         npm_path: Optional[str] = None,
     ) -> None:
+        super().__init__(meta)
+
         if isinstance(packages, str):
             packages = [packages]
         self.packages = packages

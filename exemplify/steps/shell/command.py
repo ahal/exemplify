@@ -1,7 +1,7 @@
 import os
 import subprocess
 import tempfile
-from typing import Generator, Optional
+from typing import Any, Generator, Optional
 
 from exemplify.steps.base import Step, register
 from exemplify.util.process import run
@@ -13,12 +13,14 @@ class Command(Step):
 
     def __init__(
         self,
-        meta: dict,
+        meta: dict[str, Any],
         run: list | str,
         check: Optional[str] = None,
         cwd: Optional[str] = None,
         alias: Optional[str] = None,
     ) -> None:
+        super().__init__(meta)
+
         self.runcmds = run
 
         if isinstance(self.runcmds, str):

@@ -7,6 +7,8 @@ class Cargo(Step):
     name = "cargo"
 
     def __init__(self, meta: dict, packages: str | list[str]):
+        super().__init__(meta)
+
         if isinstance(packages, str):
             packages = [packages]
         self.packages = packages

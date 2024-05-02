@@ -18,6 +18,8 @@ class VCS(Step, ABC):
     def __init__(
         self, meta: dict, repo: str, dest: str, basename: Optional[str] = None
     ) -> None:
+        super().__init__(meta)
+
         self.repo = repo
         self.dest = os.path.expanduser(dest)
         self.basename = basename
