@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from rich.console import Console
 from rich.progress import (
     Progress,
@@ -10,7 +10,8 @@ from rich.progress import (
 )
 from rich.text import Text
 
-from exemplify.steps.base import Step
+if TYPE_CHECKING:
+    from exemplify.steps.base import Step
 
 
 console = Console()
@@ -41,7 +42,7 @@ class HiddenTimeElapsedColumn(TimeElapsedColumn):
 @dataclass
 class StepInfo:
     task_id: TaskID
-    step: Step
+    step: "Step"
     output: list[str] = field(default_factory=list)
     ret: Optional[int] = None
     display_output: bool = False
@@ -58,7 +59,7 @@ class StepProgress(Progress):
             **kwargs,
         )
 
-    def add_step(self, step: Step) -> None:
+    def add_step(self, step: "Step") -> None:
         task_id = self.add_task(str(step), start=False, visible=False)
         self._steps.append(StepInfo(task_id, step, display_output=self.display_output))
 
@@ -66,7 +67,7 @@ class StepProgress(Progress):
     def current(self) -> StepInfo:
         return self._steps[self._cur_index]
 
-    def __next__(self) -> Step:
+    def __next__(self) -> "Step":
         if self._cur_index >= 0:
             self.stop_task(self.current.task_id)
             self.update(advance=1)
