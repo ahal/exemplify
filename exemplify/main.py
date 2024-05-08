@@ -118,7 +118,7 @@ def exemplify(
                         try:
                             while True:
                                 output = next(sync)
-                                progress.step.append_output(output.strip())
+                                progress.step.append_output(output)
                         except StopIteration as e:
                             ret = e.value
                     else:

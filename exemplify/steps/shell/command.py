@@ -51,7 +51,7 @@ class Command(Step):
 
         returncode = 0
         for cmd in self.runcmds:
-            yield f"+ {cmd.strip()}"
+            yield f"+ {cmd.strip()}\n"
             proc = subprocess.Popen(
                 cmd,
                 shell=True,

@@ -43,7 +43,7 @@ class HiddenTimeElapsedColumn(TimeElapsedColumn):
 class StepInfo:
     task_id: TaskID
     step: "Step"
-    output: list[str] = field(default_factory=list)
+    output: Text = field(default_factory=Text)
     ret: Optional[int] = None
     display_output: bool = False
 
@@ -94,10 +94,10 @@ class StepProgress(Progress):
             if info.ret is not None:
                 emoji = ":white_heavy_check_mark: " if info.ret == 0 else ":x: "
 
-            desc = [f"{emoji}{info.step}"]
+            desc = f"{emoji}{info.step}"
             if info.display_output:
-                desc.extend(info.output)
-            kwargs["description"] = "\n".join(desc)
+                desc = f"{desc}\n{info.output}"
+            kwargs["description"] = desc
 
         super().update(info.task_id, *args, **kwargs)
 
