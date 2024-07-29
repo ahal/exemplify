@@ -54,6 +54,7 @@ class Command(Step):
             yield f"+ {cmd.strip()}\n"
             proc = subprocess.Popen(
                 cmd,
+                cwd=self.cwd,
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,

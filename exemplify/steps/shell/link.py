@@ -31,8 +31,8 @@ class Link(Step):
             else:
                 self.basename = basename
         else:
-            self.dest, self.name = os.path.split(dest)
-        self.path = os.path.join(self.dest, self.name)
+            self.dest, self.basename = os.path.split(dest)
+        self.path = os.path.join(self.dest, self.basename)
 
     @property
     def directive(self) -> str:
@@ -45,4 +45,4 @@ class Link(Step):
         if not os.path.isdir(self.dest):
             os.makedirs(self.dest)
 
-        return run(["ln", "-s", self.source, self.name], cwd=self.dest).returncode
+        return run(["ln", "-s", self.source, self.basename], cwd=self.dest).returncode
