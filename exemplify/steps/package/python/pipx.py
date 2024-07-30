@@ -1,5 +1,5 @@
-import os
 import subprocess
+from shutil import which
 from typing import Optional
 
 from exemplify.steps.base import Step, register
@@ -15,7 +15,7 @@ class PipX(Step):
 
         self.package = package
         self.inject = inject
-        self.pipx = os.path.expanduser("~/.pyenv/shims/pipx")
+        self.pipx = which("pipx")
 
     @property
     def directive(self) -> str:
