@@ -1,6 +1,27 @@
 import subprocess
 
-from exemplify.console import console
+from rich.padding import Padding
+
+from exemplify.main import console
+
+VERBOSE = False
+
+
+def print_output(proc) -> bool:
+    first = True
+    while True:
+        assert proc.stdout
+        line = proc.stdout.readline()
+        if not line:
+            break
+
+        if first and VERBOSE:
+            console.print("")
+            first = False
+
+        console.print(Padding(line.strip(), (0, 0, 0, 2)))
+
+    return not first
 
 
 def run(*args, **kwargs):
@@ -20,9 +41,19 @@ def run(*args, **kwargs):
         kwargs["stderr"] = subprocess.STDOUT
 
     kwargs["text"] = True
-    proc = subprocess.run(*args, **kwargs)
+    proc = subprocess.Popen(*args, **kwargs)
 
     if not capture_stdout:
-        console.print(proc.stdout)
+        if VERBOSE:
+            print_output(proc)
+        else:
+            with console.capture() as capture:
+                print_output(proc)
 
+            proc.wait()
+
+            if proc.returncode != 0:
+                print(f"\n{capture.get().rstrip()}")
+
+    proc.wait()
     return proc

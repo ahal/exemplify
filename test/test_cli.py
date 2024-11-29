@@ -1,3 +1,4 @@
+from textwrap import dedent
 import pytest
 
 from exemplify.cli import run
@@ -17,44 +18,53 @@ def run_with_args():
         pytest.param(
             "pass.toml",
             [],
+            dedent(
+                """
+                Routine FOO ────────────────────────────────────────────────────────────────────
+                COMMAND Saying hello .. ✅
+                COMMAND Saying world .. ✅
+                Routine BAR ────────────────────────────────────────────────────────────────────
+                COMMAND Saying goodbye .. ✅
             """
-Routine foo succeeded! 0:00:00
-  ✅ COMMAND Saying hello
-  ✅ COMMAND Saying world
-Routine bar succeeded! 0:00:00
-  ✅ COMMAND Saying goodbye""".lstrip(),
+            ).lstrip(),
             "",
             id="pass",
         ),
         pytest.param(
             "pass.toml",
             ["-v"],
+            dedent(
+                """
+                Routine FOO ────────────────────────────────────────────────────────────────────
+                COMMAND Saying hello ..
+                  Hello                                                                         
+                ✅ return code: 0
+                COMMAND Saying world ..
+                  world                                                                         
+                ✅ return code: 0
+                Routine BAR ────────────────────────────────────────────────────────────────────
+                COMMAND Saying goodbye ..
+                  Goodbye                                                                       
+                ✅ return code: 0
             """
-Routine foo succeeded! 0:00:00
-  ✅ COMMAND Saying hello
-  + echo Hello           
-  Hello                  
-  ✅ COMMAND Saying world
-  + echo world           
-  world                  
-Routine bar succeeded! 0:00:00
-  ✅ COMMAND Saying goodbye
-  + echo Goodbye           
-  Goodbye                  """.lstrip(),
+            ).lstrip(),
             "",
             id="verbose",
         ),
         pytest.param(
             "fail.toml",
             [],
+            dedent(
+                """
+                Routine FOO ────────────────────────────────────────────────────────────────────
+                COMMAND Saying hello .. ✅
+                COMMAND Saying world ..
+                  world
+                ❌ return code: 1
+                Routine BAR ────────────────────────────────────────────────────────────────────
+                COMMAND Saying goodbye .. ✅
             """
-Routine foo failed! 0:00:00
-  ✅ COMMAND Saying hello
-  ❌ COMMAND Saying world
-  + echo world; exit 1   
-  world                  
-Routine bar succeeded! 0:00:00
-  ✅ COMMAND Saying goodbye""".lstrip(),
+            ).lstrip(),
             "",
             id="fail",
         ),

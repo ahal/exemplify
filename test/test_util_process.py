@@ -70,11 +70,18 @@ from exemplify.util import process
     ),
 )
 def test_run(mocker, args, kwargs, expected_kwargs, expected_print):
-    mock_run = mocker.patch.object(process.subprocess, "run")
+    mock_stdout = mocker.PropertyMock()
+    mock_stdout.readline.side_effect = ["foobar", None]
+
+    mock_proc = mocker.MagicMock(new_callable=mocker.PropertyMock)
+    mock_proc.stdout = mock_stdout
+
+    mock_popen = mocker.patch.object(process.subprocess, "Popen", return_value=mock_proc)
+
     mock_print = mocker.patch.object(process.console, "print")
 
     process.run(*args, **kwargs)
 
     kwargs.update(expected_kwargs)
-    mock_run.assert_called_once_with(*args, **kwargs)
+    mock_popen.assert_called_once_with(*args, **kwargs)
     assert mock_print.called == expected_print

@@ -2,6 +2,9 @@ import os
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Generator
 
+from rich.console import RenderableType
+
+from exemplify.main import console
 from exemplify.util.python_path import import_modules
 
 
@@ -24,7 +27,7 @@ class Step(ABC):
 
     @property
     @abstractmethod
-    def directive(self) -> str: ...
+    def directive(self) -> RenderableType: ...
 
     @abstractmethod
     def sync(self) -> int | Generator[str, str, int]: ...
@@ -33,7 +36,10 @@ class Step(ABC):
         return True
 
     def __str__(self):
-        return f"[blue]{self.name.upper()}[/blue] [grey]{self.directive}[/grey]"
+        with console.capture() as capture:
+            console.print(f"[blue]{self.name.upper()}[/blue] ", end="")
+            console.print(self.directive, end="")
+        return capture.get().strip()
 
 
 # Trigger step registration.

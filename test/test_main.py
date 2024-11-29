@@ -5,6 +5,7 @@ from textwrap import dedent
 import pytest
 
 from exemplify import main
+from exemplify.steps.base import registry
 
 from conftest import FakeStep
 
@@ -86,7 +87,7 @@ def defaults(_type):
     return {}
 
 
-@pytest.mark.parametrize("name", main.registry.keys())
+@pytest.mark.parametrize("name", registry.keys())
 def test_generate_steps_basic(name):
     step = {"type": name}
     step.update(defaults(name))
@@ -94,7 +95,7 @@ def test_generate_steps_basic(name):
 
     steps = list(main.generate_steps(name, config))
     assert len(steps) == 1
-    assert isinstance(steps[0], main.registry[name])
+    assert isinstance(steps[0], registry[name])
 
 
 def assert_empty(e):
@@ -130,7 +131,7 @@ def assert_interpolate(steps):
     ),
 )
 def test_generate_steps_custom(request, mocker, routine, config):
-    mocker.patch.dict(main.registry, {"foo": FakeStep, "bar": FakeStep})
+    mocker.patch.dict(registry, {"foo": FakeStep, "bar": FakeStep})
 
     try:
         result = list(main.generate_steps(routine, config))

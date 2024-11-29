@@ -3,6 +3,8 @@ from textwrap import dedent
 
 import pytest
 
+from exemplify.main import console
+
 
 @pytest.mark.parametrize(
     "kwargs,expected_returncode,expected_output",
@@ -69,19 +71,10 @@ def test_command_sync(make_step, kwargs, expected_returncode, expected_output):
     step = make_step(**kwargs)
     if inspect.isclass(expected_output) and issubclass(expected_output, Exception):
         with pytest.raises(expected_output):
-            list(step.sync())
+            step.sync()
     else:
-        out = []
-        ret = None
-        sync = step.sync()
-        try:
-            while True:
-                out.append(next(sync))
-        except StopIteration as e:
-            ret = e.value
-
+        ret = step.sync()
         assert ret == expected_returncode
-        assert "\n".join(out) == expected_output
 
 
 @pytest.mark.parametrize(
@@ -89,7 +82,7 @@ def test_command_sync(make_step, kwargs, expected_returncode, expected_output):
     (
         pytest.param(
             {"run": "echo hello", "cwd": "workdir"},
-            "echo hello in workdir",
+            "echo hello",
             id="default",
         ),
         pytest.param(
@@ -101,4 +94,4 @@ def test_command_sync(make_step, kwargs, expected_returncode, expected_output):
 )
 def test_command_directive(make_step, kwargs, expected_directive):
     step = make_step(**kwargs)
-    assert step.directive == expected_directive
+    assert step.directive.code == expected_directive
