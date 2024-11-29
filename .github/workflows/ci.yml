@@ -12,15 +12,13 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-      - run: pipx install poetry
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: poetry
-      - run: poetry install
-      - run: echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+          python-version-file: "pyproject.toml"
       - name: Run pyright
-        uses: jakebailey/pyright-action@v2.3.0
+        run: uv run pyright
   pytest:
     name: Run pytest
     runs-on: ubuntu-latest
@@ -30,19 +28,17 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-      - run: pipx install poetry
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: poetry
-      - run: poetry install
-      - run: echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
       - name: Run pytest
         shell: bash
-        run: pytest --cov -vv
+        run: uv run pytest --cov -vv
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+        uses: codecov/codecov-action@v5.0.7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: ahal/exemplify
