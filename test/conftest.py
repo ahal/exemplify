@@ -37,3 +37,11 @@ def make_step(request, meta):
         return registry[kind](meta, *args, **kwargs)
 
     return inner
+
+
+@pytest.fixture(scope="session")
+def run_exemplify():
+    def inner(config):
+        pass
+
+    return inner

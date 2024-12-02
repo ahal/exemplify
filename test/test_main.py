@@ -7,7 +7,7 @@ import pytest
 from exemplify import main
 from exemplify.steps.base import registry
 
-from test.conftest import FakeStep
+from conftest import FakeStep
 
 
 @pytest.mark.parametrize(
