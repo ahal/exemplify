@@ -76,7 +76,9 @@ def test_run(mocker, args, kwargs, expected_kwargs, expected_print):
     mock_proc = mocker.MagicMock(new_callable=mocker.PropertyMock)
     mock_proc.stdout = mock_stdout
 
-    mock_popen = mocker.patch.object(process.subprocess, "Popen", return_value=mock_proc)
+    mock_popen = mocker.patch.object(
+        process.subprocess, "Popen", return_value=mock_proc
+    )
 
     mock_print = mocker.patch.object(process.console, "print")
 

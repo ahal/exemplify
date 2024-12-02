@@ -23,11 +23,12 @@ class PipX(Step):
 
     def exists(self) -> bool:
         try:
-            output = run(
+            proc = run(
                 [self.pipx, "list", "--include-injected"],
                 capture_output=True,
                 text=True,
             )
+            output = proc.stdout or ""
             return self.package in output
         except subprocess.CalledProcessError:
             return False

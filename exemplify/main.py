@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-import sys
 from typing import Optional
 
 import tomli
@@ -11,6 +10,7 @@ console = Console()
 
 def parse_config(path: str) -> dict:
     from exemplify.util.merge import merge
+
     root_path = os.path.dirname(path)
 
     with open(path, "rb") as fh:
@@ -56,6 +56,7 @@ def exemplify(
     exemplar_path: str, routines: Optional[list[str]] = None, verbose: bool = False
 ) -> int:
     from exemplify.util import process
+
     process.VERBOSE = verbose
 
     exemplar = Path(exemplar_path).resolve()

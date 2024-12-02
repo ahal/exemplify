@@ -3,8 +3,6 @@ from textwrap import dedent
 
 import pytest
 
-from exemplify.main import console
-
 
 @pytest.mark.parametrize(
     "kwargs,expected_returncode,expected_output",
