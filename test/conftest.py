@@ -1,5 +1,7 @@
 from pathlib import Path
 import pytest
+
+from exemplify.main import exemplify
 from exemplify.steps.base import Step, registry
 
 here = Path(__file__).parent
@@ -39,9 +41,22 @@ def make_step(request, meta):
     return inner
 
 
-@pytest.fixture(scope="session")
-def run_exemplify():
-    def inner(config):
-        pass
+@pytest.fixture
+def run_exemplify(capfd, tmp_path):
+    
+    def inner(exemplify_toml, verbose=False):
+        config_path = tmp_path / "exemplify.toml"
+        config_path.write_text(exemplify_toml)
+
+        ret = exemplify(tmp_path, verbose=verbose)
+        out, err = capfd.readouterr()
+        capfd.disabled()
+
+        if out:
+            print(f"Captured stdout:\n{out}")
+        if err:
+            print(f"Captured stderr:\n{out}")
+
+        return ret, out, err
 
     return inner

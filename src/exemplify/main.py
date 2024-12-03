@@ -67,6 +67,7 @@ def exemplify(
     if not routines:
         routines = [k for k in config.keys() if k != "meta"]
 
+    ret = 0
     for name in routines:
         console.rule(f"Routine [blue]{name.upper()}", align="left")
 
@@ -74,6 +75,7 @@ def exemplify(
             print(f"{step} ", end="..", flush=True)
 
             result = step.sync()
+            ret |= result
 
             if result == 0:
                 msg = ":white_heavy_check_mark:"
@@ -81,10 +83,10 @@ def exemplify(
                 msg = ":x:"
 
             if verbose or result != 0:
-                msg = f"{msg} return code: {result}"
+                msg = f" {msg} return code: {result}"
             else:
                 msg = f" {msg}"
 
             console.print(msg)
 
-    return 0
+    return ret

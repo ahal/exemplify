@@ -25,14 +25,18 @@ def print_output(proc) -> bool:
 
 
 def run(*args, **kwargs):
-    capture_stdout = kwargs.get("capture_output") or kwargs.get("stdout") in (
+    if kwargs.pop("capture_output", None):
+        kwargs["stdout"] = subprocess.PIPE
+        kwargs["stderr"] = subprocess.PIPE
+
+    capture_stdout = kwargs.get("stdout") in (
         subprocess.PIPE,
         subprocess.DEVNULL,
     )
     if not capture_stdout:
         kwargs["stdout"] = subprocess.PIPE
 
-    capture_stderr = kwargs.get("capture_output") or kwargs.get("stderr") in (
+    capture_stderr = kwargs.get("stderr") in (
         subprocess.PIPE,
         subprocess.DEVNULL,
         subprocess.STDOUT,

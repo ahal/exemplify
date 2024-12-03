@@ -58,6 +58,7 @@ class Command(Step):
                 cwd=self.cwd,
                 shell=True,
                 text=True,
+                capture_output=True,
             )
             returncode |= proc.returncode
 
