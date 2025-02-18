@@ -10,7 +10,10 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: "test/test_cli.py"
+        exclude: |
+          (?x)^(
+            test/test_integration.py
+          )
       - id: end-of-file-fixer
       - id: check-yaml
         exclude: template

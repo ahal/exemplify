@@ -8,7 +8,7 @@ def test_command_basic(run_exemplify):
         """
         [[test.step]]
         type = "command"
-        run = "echo 'foo'"
+        run = "echo 'foo'" 
         """
     )
     assert ret == 0
@@ -21,7 +21,7 @@ def test_command_fail(run_exemplify):
         """
         [[test.step]]
         type = "command"
-        run = "exit 1"
+        run = "exit 1" 
         """
     )
     assert ret == 1
@@ -95,15 +95,15 @@ def test_legacy_cli_test_pass_verbose(pass_toml, run_exemplify):
         == dedent(
             """
                 Routine FOO ────────────────────────────────────────────────────────────────────
-                COMMAND Saying hello ..
-                  Hello
+                COMMAND Saying hello .. 
+                  Hello                                                                         
                 ✅ return code: 0
-                COMMAND Saying world ..
-                  world
+                COMMAND Saying world .. 
+                  world                                                                         
                 ✅ return code: 0
                 Routine BAR ────────────────────────────────────────────────────────────────────
-                COMMAND Saying goodbye ..
-                  Goodbye
+                COMMAND Saying goodbye .. 
+                  Goodbye                                                                       
                 ✅ return code: 0
             """
         ).lstrip()
@@ -120,7 +120,7 @@ def test_legacy_cli_test_fail(fail_toml, run_exemplify):
             """
                 Routine FOO ────────────────────────────────────────────────────────────────────
                 COMMAND Saying hello .. ✅
-                COMMAND Saying world ..
+                COMMAND Saying world .. 
                   world
                 ❌ return code: 1
                 Routine BAR ────────────────────────────────────────────────────────────────────
