@@ -7,11 +7,6 @@ from exemplify.steps.base import Step, registry
 here = Path(__file__).parent
 
 
-@pytest.fixture(scope="session")
-def datadir():
-    return here / "data"
-
-
 class FakeStep(Step):
     name = "fake"
 
@@ -43,19 +38,17 @@ def make_step(request, meta):
 
 @pytest.fixture
 def run_exemplify(capfd, tmp_path):
-    
     def inner(exemplify_toml, verbose=False):
         config_path = tmp_path / "exemplify.toml"
         config_path.write_text(exemplify_toml)
 
         ret = exemplify(tmp_path, verbose=verbose)
-        out, err = capfd.readouterr()
-        capfd.disabled()
 
+        out, err = capfd.readouterr()
         if out:
             print(f"Captured stdout:\n{out}")
         if err:
-            print(f"Captured stderr:\n{out}")
+            print(f"Captured stderr:\n{err}")
 
         return ret, out, err
 

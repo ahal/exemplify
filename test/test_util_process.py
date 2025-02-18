@@ -24,6 +24,8 @@ from exemplify.util import process
             {"capture_output": True},
             {
                 "text": True,
+                "stdout": subprocess.PIPE,
+                "stderr": subprocess.PIPE,
             },
             False,
             id="captured",
@@ -33,6 +35,8 @@ from exemplify.util import process
             {"stdout": subprocess.PIPE, "stderr": subprocess.PIPE},
             {
                 "text": True,
+                "stdout": subprocess.PIPE,
+                "stderr": subprocess.PIPE,
             },
             False,
             id="captured",
@@ -41,6 +45,7 @@ from exemplify.util import process
             (["echo", "foo"],),
             {"stdout": subprocess.PIPE},
             {
+                "stdout": subprocess.PIPE,
                 "stderr": subprocess.STDOUT,
                 "text": True,
             },
@@ -52,6 +57,7 @@ from exemplify.util import process
             {"stderr": subprocess.PIPE},
             {
                 "stdout": subprocess.PIPE,
+                "stderr": subprocess.PIPE,
                 "text": True,
             },
             True,
@@ -61,6 +67,7 @@ from exemplify.util import process
             (["echo", "foo"],),
             {"stdout": subprocess.DEVNULL},
             {
+                "stdout": subprocess.DEVNULL,
                 "stderr": subprocess.STDOUT,
                 "text": True,
             },
@@ -84,6 +91,5 @@ def test_run(mocker, args, kwargs, expected_kwargs, expected_print):
 
     process.run(*args, **kwargs)
 
-    kwargs.update(expected_kwargs)
-    mock_popen.assert_called_once_with(*args, **kwargs)
+    mock_popen.assert_called_once_with(*args, **expected_kwargs)
     assert mock_print.called == expected_print

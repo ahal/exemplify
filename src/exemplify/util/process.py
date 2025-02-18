@@ -57,7 +57,9 @@ def run(*args, **kwargs):
             proc.wait()
 
             if proc.returncode != 0:
-                print(f"\n{capture.get().rstrip()}")
+                output = capture.get().rstrip()
+                if output:
+                    print(f"\n{output}")
 
     proc.wait()
     return proc

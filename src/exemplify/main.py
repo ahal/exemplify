@@ -72,7 +72,7 @@ def exemplify(
         console.rule(f"Routine [blue]{name.upper()}", align="left")
 
         for step in generate_steps(name, config):
-            print(f"{step} ", end="..", flush=True)
+            print(f"{step} ", end=".. ", flush=True)
 
             result = step.sync()
             ret |= result
@@ -83,9 +83,9 @@ def exemplify(
                 msg = ":x:"
 
             if verbose or result != 0:
-                msg = f" {msg} return code: {result}"
+                msg = f"{msg} return code: {result}"
             else:
-                msg = f" {msg}"
+                msg = f"{msg}"
 
             console.print(msg)
 
