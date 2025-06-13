@@ -1,6 +1,7 @@
 """
 Command Line Interface (CLI) for `exemplify`.
 """
+
 import os
 import sys
 from argparse import ArgumentParser

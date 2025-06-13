@@ -1,6 +1,7 @@
 """
 Utility to merge Python dictionaries.
 """
+
 import copy
 from typing import Any, Dict
 

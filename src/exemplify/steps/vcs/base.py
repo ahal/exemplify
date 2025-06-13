@@ -1,6 +1,7 @@
 """
 Base module for version control steps.
 """
+
 import os
 from abc import ABC, abstractmethod
 from typing import Optional
@@ -51,5 +52,3 @@ class VCS(Step, ABC):
             cmd.append(self.name)
 
         return run(cmd, cwd=self.dest).returncode
-
-

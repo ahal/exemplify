@@ -1,6 +1,7 @@
 """
 Utility for managing subprocesses and rich output.
 """
+
 import subprocess
 from subprocess import Popen
 from typing import Any

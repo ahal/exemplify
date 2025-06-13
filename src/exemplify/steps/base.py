@@ -1,9 +1,10 @@
 """
 Base module for steps.
 """
+
 import os
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Generator, List
+from typing import Any, Callable, Generator
 
 from rich.console import RenderableType
 
@@ -15,6 +16,7 @@ def register() -> Callable[[type], None]:
     """
     Decorator to register a step class.
     """
+
     def wrap(cls: type) -> None:
         if cls.name not in registry:
             registry[cls.name] = cls

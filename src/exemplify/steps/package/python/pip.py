@@ -1,6 +1,7 @@
 """
 Pip package manager step.
 """
+
 import os
 from typing import List, Optional
 
@@ -13,7 +14,10 @@ class Pip(Step):
     name = "pip"
 
     def __init__(
-        self, meta: dict[str, Any], packages: str | List[str], pip_path: Optional[str] = None
+        self,
+        meta: dict[str, Any],
+        packages: str | List[str],
+        pip_path: Optional[str] = None,
     ) -> None:
         super().__init__(meta)
 

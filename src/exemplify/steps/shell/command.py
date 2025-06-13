@@ -1,6 +1,7 @@
 """
 Command execution step.
 """
+
 import os
 import tempfile
 from typing import Any, List, Optional

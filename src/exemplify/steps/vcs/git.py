@@ -1,6 +1,7 @@
 """
 Git version control management step.
 """
+
 from exemplify.steps.base import register
 from exemplify.steps.vcs.base import VCS
 

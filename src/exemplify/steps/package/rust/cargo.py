@@ -1,6 +1,7 @@
 """
 Rust Cargo package management step.
 """
+
 from typing import List
 
 from exemplify.steps.base import Step, register

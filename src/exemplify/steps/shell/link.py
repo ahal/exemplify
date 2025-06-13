@@ -1,6 +1,7 @@
 """
 Link management step.
 """
+
 import os
 from typing import Optional
 
