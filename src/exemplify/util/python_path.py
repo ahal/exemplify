@@ -1,8 +1,12 @@
+"""
+Utility for dealing with Python path import.
+"""
 import inspect
 import os
+from typing import Optional, Sequence
 
 
-def import_modules(exceptions=None):
+def import_modules(exceptions: Optional[Sequence[str]] = None) -> None:
     """
     Import all Python modules in subdirectories under the calling module.
 

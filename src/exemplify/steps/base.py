@@ -1,6 +1,9 @@
+"""
+Base module for steps.
+"""
 import os
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Generator
+from typing import Any, Callable, Generator, List
 
 from rich.console import RenderableType
 
@@ -8,15 +11,18 @@ from exemplify.main import console
 from exemplify.util.python_path import import_modules
 
 
-registry = {}
-
-
-def register() -> Callable:
-    def wrap(cls):
+def register() -> Callable[[type], None]:
+    """
+    Decorator to register a step class.
+    """
+    def wrap(cls: type) -> None:
         if cls.name not in registry:
             registry[cls.name] = cls
 
     return wrap
+
+
+registry: dict[str, type] = {}
 
 
 class Step(ABC):

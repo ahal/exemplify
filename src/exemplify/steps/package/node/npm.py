@@ -1,9 +1,11 @@
+"""
+Node package management step.
+"""
 import os
-import subprocess
-from typing import Optional
+from typing import List, Optional
 
-from exemplify.steps.base import Step, register
 from exemplify.util.process import run
+from exemplify.steps.base import Step, register
 
 
 @register()
@@ -12,8 +14,8 @@ class Npm(Step):
 
     def __init__(
         self,
-        meta: dict,
-        packages: str | list[str],
+        meta: dict[str, Any],
+        packages: str | List[str],
         global_: bool = True,
         npm_path: Optional[str] = None,
     ) -> None:

@@ -1,11 +1,15 @@
+"""
+Command Line Interface (CLI) for `exemplify`.
+"""
 import os
 import sys
 from argparse import ArgumentParser
+from typing import Sequence
 
 from exemplify.main import exemplify
 
 
-def run(args=sys.argv[1:]):
+def run(args: Sequence[str] = sys.argv[1:]) -> None:
     parser = ArgumentParser()
     parser.add_argument(
         "exemplar", default=os.getcwd(), help="Exemplar to synchronize with"

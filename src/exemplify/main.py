@@ -8,7 +8,7 @@ from rich.console import Console
 console = Console()
 
 
-def parse_config(path: str) -> dict:
+def parse_config(path: str) -> dict[str, Any]:
     from exemplify.util.merge import merge
 
     root_path = os.path.dirname(path)
@@ -25,7 +25,7 @@ def parse_config(path: str) -> dict:
     return data
 
 
-def discover_config(exemplar: Path):
+def discover_config(exemplar: Path) -> Path:
     if exemplar.suffix == ".toml":
         return exemplar
 
@@ -36,7 +36,7 @@ def discover_config(exemplar: Path):
     raise Exception(f"Config not found for {exemplar}!")
 
 
-def generate_steps(name: str, config: dict):
+def generate_steps(name: str, config: dict[str, Any]) -> Generator[Step, None, None]:
     from exemplify.steps.base import registry
 
     routine = config[name]

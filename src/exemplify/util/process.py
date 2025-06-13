@@ -1,4 +1,9 @@
+"""
+Utility for managing subprocesses and rich output.
+"""
 import subprocess
+from subprocess import Popen
+from typing import Any
 
 from rich.padding import Padding
 
@@ -7,7 +12,7 @@ from exemplify.main import console
 VERBOSE = False
 
 
-def print_output(proc) -> bool:
+def print_output(proc: Popen[Any]) -> bool:
     first = True
     while True:
         assert proc.stdout
@@ -24,7 +29,7 @@ def print_output(proc) -> bool:
     return not first
 
 
-def run(*args, **kwargs):
+def run(*args: Any, **kwargs: Any) -> Popen:
     if kwargs.pop("capture_output", None):
         kwargs["stdout"] = subprocess.PIPE
         kwargs["stderr"] = subprocess.PIPE

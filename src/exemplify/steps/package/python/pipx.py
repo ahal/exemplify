@@ -1,3 +1,6 @@
+"""
+Pipx package manager step.
+"""
 import subprocess
 from shutil import which
 from typing import Optional
@@ -10,7 +13,7 @@ from exemplify.util.process import run
 class PipX(Step):
     name = "pipx"
 
-    def __init__(self, meta: dict, package: str, inject: Optional[str] = None) -> None:
+    def __init__(self, meta: dict[str, Any], package: str, inject: Optional[str] = None) -> None:
         super().__init__(meta)
 
         self.package = package

@@ -1,3 +1,6 @@
+"""
+Git version control management step.
+"""
 from exemplify.steps.base import register
 from exemplify.steps.vcs.base import VCS
 
@@ -11,9 +14,9 @@ class Git(VCS):
         super().__init__(*args, **kwargs)
 
     @property
-    def install_command(self):
+    def install_command(self) -> list[str]:
         return ["git", "clone"]
 
     @property
-    def update_command(self):
+    def update_command(self) -> list[str]:
         return ["git", "pull", "origin", self.branch]

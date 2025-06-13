@@ -1,3 +1,6 @@
+"""
+Link management step.
+"""
 import os
 from typing import Optional
 
@@ -11,7 +14,7 @@ class Link(Step):
 
     def __init__(
         self,
-        meta: dict,
+        meta: dict[str, Any],
         source: str,
         dest: Optional[str] = None,
         basename: Optional[str] = None,

@@ -1,7 +1,11 @@
+"""
+Utility to merge Python dictionaries.
+"""
 import copy
+from typing import Any, Dict
 
 
-def merge_to(source, dest):
+def merge_to(source: Dict[str, Any], dest: Dict[str, Any]) -> Dict[str, Any]:
     """
     Merge dict and arrays (override scalar values)
 
@@ -32,7 +36,7 @@ def merge_to(source, dest):
     return dest
 
 
-def merge(*objects):
+def merge(*objects: Dict[str, Any]) -> Dict[str, Any]:
     """
     Merge the given objects, using the semantics described for merge_to, with
     objects later in the list taking precedence.  From an inheritance

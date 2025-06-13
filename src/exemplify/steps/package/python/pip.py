@@ -1,5 +1,8 @@
+"""
+Pip package manager step.
+"""
 import os
-from typing import Optional
+from typing import List, Optional
 
 from exemplify.steps.base import Step, register
 from exemplify.util.process import run
@@ -10,7 +13,7 @@ class Pip(Step):
     name = "pip"
 
     def __init__(
-        self, meta: dict, packages: str | list[str], pip_path: Optional[str] = None
+        self, meta: dict[str, Any], packages: str | List[str], pip_path: Optional[str] = None
     ) -> None:
         super().__init__(meta)
 

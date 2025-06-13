@@ -1,6 +1,9 @@
+"""
+Command execution step.
+"""
 import os
 import tempfile
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 from rich.console import RenderableType
 from rich.syntax import Syntax
@@ -16,7 +19,7 @@ class Command(Step):
     def __init__(
         self,
         meta: dict[str, Any],
-        run: list | str,
+        run: str | List[str],
         check: Optional[str] = None,
         cwd: Optional[str] = None,
         alias: Optional[str] = None,

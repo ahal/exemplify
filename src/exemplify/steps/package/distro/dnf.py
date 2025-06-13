@@ -1,5 +1,9 @@
+"""
+DNF package management step.
+"""
 import subprocess
 from shutil import which
+from typing import List
 
 from exemplify.steps.base import Step, register
 from exemplify.util.process import run
@@ -9,7 +13,7 @@ from exemplify.util.process import run
 class Dnf(Step):
     name = "dnf"
 
-    def __init__(self, meta: dict, packages: str | list[str]) -> None:
+    def __init__(self, meta: dict[str, Any], packages: str | List[str]) -> None:
         super().__init__(meta)
 
         if isinstance(packages, str):

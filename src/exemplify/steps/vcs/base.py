@@ -1,3 +1,6 @@
+"""
+Base module for version control steps.
+"""
 import os
 from abc import ABC, abstractmethod
 from typing import Optional
@@ -16,7 +19,7 @@ class VCS(Step, ABC):
     def update_command(self) -> list[str]: ...
 
     def __init__(
-        self, meta: dict, repo: str, dest: str, basename: Optional[str] = None
+        self, meta: dict[str, Any], repo: str, dest: str, basename: Optional[str] = None
     ) -> None:
         super().__init__(meta)
 
@@ -31,7 +34,7 @@ class VCS(Step, ABC):
         return os.path.isdir(self.path)
 
     @property
-    def directive(self):
+    def directive(self) -> str:
         verb = "pull" if self.exists() else "clone"
         return f"{verb} {self.repo} to {self.path}"
 
@@ -48,3 +51,5 @@ class VCS(Step, ABC):
             cmd.append(self.name)
 
         return run(cmd, cwd=self.dest).returncode
+
+

@@ -1,3 +1,8 @@
+"""
+Rust Cargo package management step.
+"""
+from typing import List
+
 from exemplify.steps.base import Step, register
 from exemplify.util.process import run
 
@@ -6,7 +11,7 @@ from exemplify.util.process import run
 class Cargo(Step):
     name = "cargo"
 
-    def __init__(self, meta: dict, packages: str | list[str]):
+    def __init__(self, meta: dict[str, Any], packages: str | List[str]) -> None:
         super().__init__(meta)
 
         if isinstance(packages, str):
